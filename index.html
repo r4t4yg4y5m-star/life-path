@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090b10">
 <title>LIFE PATH</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 *{box-sizing:border-box}
@@ -13,56 +14,70 @@ body{
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 .app{max-width:680px;margin:auto;padding:22px 17px 45px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
-.logo{font-size:20px;font-weight:850;letter-spacing:3px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.logo{font-size:21px;font-weight:900;letter-spacing:3px}
 .logo span{color:#9bbce8}
-.version{font-size:10px;color:#8994a5;border:1px solid #303744;padding:6px 9px;border-radius:20px}
-.card{
- background:#121720;border:1px solid #252e3b;
- border-radius:17px;padding:19px;margin-bottom:14px;
-}
-.hero{background:linear-gradient(145deg,#1b293c,#111720);padding:25px 21px}
-.eyebrow{font-size:10px;letter-spacing:2px;color:#9bbce8;font-weight:800}
-h1{font-size:35px;line-height:1.08;letter-spacing:-1.5px;margin:13px 0}
-h2{font-size:17px;margin:0 0 15px}
+.version{font-size:10px;color:#8994a5;border:1px solid #303744;padding:7px 10px;border-radius:20px}
+.card{background:#121720;border:1px solid #252e3b;border-radius:17px;padding:19px;margin-bottom:14px}
+.hero{background:linear-gradient(145deg,#1b293c,#111720);padding:24px 21px}
+.eyebrow{font-size:10px;letter-spacing:2px;color:#9bbce8;font-weight:850}
+h1{font-size:34px;line-height:1.08;letter-spacing:-1.5px;margin:13px 0}
+h2{font-size:18px;margin:0 0 15px}
+h3{font-size:15px;margin:0 0 8px}
 p{line-height:1.55}
 .muted{color:#8994a5}
 .small{font-size:12px}
-input{
- width:100%;padding:15px;margin:10px 0 15px;
+.info{font-size:12px;color:#8994a5;line-height:1.5}
+input,select{
+ width:100%;padding:14px;margin:9px 0 14px;
  background:#0b1018;border:1px solid #303744;
- border-radius:11px;color:white;font-size:16px;
+ border-radius:11px;color:white;font-size:15px;
 }
 button{
- width:100%;padding:15px;border:0;border-radius:12px;
- background:#e5edf8;color:#101722;font-weight:750;
+ width:100%;padding:14px;border:0;border-radius:12px;
+ background:#e5edf8;color:#101722;font-weight:800;
  font-size:14px;margin-top:9px;cursor:pointer;
 }
 button.secondary{background:#202936;color:#edf2fa;border:1px solid #303b4b}
-button.choice{
- background:#192333;color:#f1f4f8;
- border:1px solid #354359;text-align:left;
- line-height:1.4;font-weight:650;
-}
+button.choice{background:#192333;color:#f1f4f8;border:1px solid #354359;text-align:left}
 button:disabled{opacity:.35}
 .hidden{display:none!important}
-.big-age{font-size:54px;font-weight:850;letter-spacing:-3px;margin:5px 0}
+.big-age{font-size:55px;font-weight:900;letter-spacing:-3px;margin:5px 0}
 .stage{font-size:13px;color:#a9c9f3}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
 .stat{background:#1a222e;border:1px solid #293341;border-radius:12px;padding:13px}
 .stat-name{font-size:11px;color:#8994a5}
-.stat-value{font-size:20px;font-weight:750;margin-top:6px}
+.stat-value{font-size:20px;font-weight:800;margin-top:6px}
 .money{color:#91dcb1}
+.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.nav button{margin:0;padding:12px 5px;background:#151d29;color:#aebbd0;border:1px solid #293545;font-size:12px}
+.nav button.active{background:#263b57;color:#fff;border-color:#6d94c5}
+.action-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.action{
+ background:#192333;color:#f1f4f8;border:1px solid #354359;
+ padding:15px 10px;text-align:left;min-height:80px;margin:0;
+}
+.action strong{display:block;font-size:14px;margin-bottom:5px}
+.action span{font-size:11px;color:#9aa9bd;font-weight:500}
 .event{background:linear-gradient(145deg,#182638,#121720);border-color:#34465f}
-.event-title{font-size:23px;font-weight:800;margin:10px 0}
-.event-description{font-size:14px;color:#b3bfce;line-height:1.6}
-.event-tag{font-size:10px;letter-spacing:1.5px;color:#a9c9f3}
-.history{max-height:320px;overflow:auto}
+.event-title{font-size:20px;font-weight:850;margin:10px 0}
+.event-description{font-size:13px;color:#b3bfce;line-height:1.6}
+.career-list{display:grid;gap:9px}
+.career{
+ background:#192333;border:1px solid #354359;border-radius:13px;
+ padding:13px;text-align:left;
+}
+.career-name{font-size:14px;font-weight:800}
+.career-meta{font-size:11px;color:#a5b2c4;margin-top:6px;line-height:1.5}
+.career-top{display:flex;justify-content:space-between;gap:8px}
+.tag{font-size:9px;color:#a9c9f3;background:#263b57;padding:5px 7px;border-radius:7px;white-space:nowrap}
+.history{max-height:350px;overflow:auto}
 .history-item{padding:12px 0;border-bottom:1px solid #293341;font-size:13px;line-height:1.5}
-.history-item:last-child{border:0}
-.history-age{color:#a9c9f3;font-weight:750}
+.history-age{color:#a9c9f3;font-weight:800}
 .footer{text-align:center;color:#626e7e;font-size:10px;margin-top:25px}
-.info{font-size:12px;color:#8994a5;line-height:1.5}
+.progress{height:7px;background:#26303d;border-radius:10px;overflow:hidden;margin-top:8px}
+.progress div{height:100%;background:#8bb5ed;border-radius:10px}
+.pill{display:inline-block;background:#202d3e;color:#a9c9f3;border-radius:20px;padding:6px 9px;font-size:10px;margin:3px 3px 3px 0}
 </style>
 </head>
 
@@ -71,23 +86,22 @@ button:disabled{opacity:.35}
 
 <header>
  <div class="logo">LIFE <span>PATH</span></div>
- <div class="version">PROTOTYPE 0.1</div>
+ <div class="version">PROTOTYPE 0.2</div>
 </header>
 
 <section id="startScreen">
  <div class="card hero">
   <div class="eyebrow">YOUR LIFE. YOUR CHOICES.</div>
-  <h1>Одна жизнь.<br>Ты выбираешь путь.</h1>
-  <p class="muted">Начни с рождения. Взрослей, принимай решения, строй карьеру и создавай собственную историю.</p>
+  <h1>Одна жизнь.<br>Твой собственный путь.</h1>
+  <p class="muted">Сам решай, кем стать, где работать, чему учиться и как прожить свою жизнь.</p>
  </div>
-
  <div class="card">
   <div class="eyebrow">НОВАЯ ИСТОРИЯ</div>
   <h2 style="margin-top:12px">Создание персонажа</h2>
-  <label class="small muted" for="nameInput">Имя персонажа</label>
+  <label class="small muted">Имя персонажа</label>
   <input id="nameInput" maxlength="20" placeholder="Например, Алекс">
   <button onclick="createCharacter()">Начать жизнь →</button>
-  <p class="info">Каждая жизнь начинается с рождения. У каждого персонажа будут свои условия и возможности.</p>
+  <p class="info">Твоя история начнётся с рождения. Решения будут влиять на дальнейшую жизнь.</p>
  </div>
 </section>
 
@@ -96,70 +110,123 @@ button:disabled{opacity:.35}
  <div class="card hero">
   <div class="eyebrow">ТВОЯ ЖИЗНЬ</div>
   <div class="big-age" id="age">0 лет</div>
-  <div class="stage" id="stage">Детство</div>
+  <div class="stage" id="stage">Раннее детство</div>
   <p class="muted small" id="characterName"></p>
   <p class="muted small" id="background"></p>
+  <div id="careerInfo"></div>
  </div>
 
  <div class="card">
   <h2>Характеристики</h2>
   <div class="stats">
-   <div class="stat">
-    <div class="stat-name">Деньги</div>
-    <div class="stat-value money" id="money">0 ₽</div>
-   </div>
-   <div class="stat">
-    <div class="stat-name">Образование</div>
-    <div class="stat-value" id="education">0</div>
-   </div>
-   <div class="stat">
-    <div class="stat-name">Навыки</div>
-    <div class="stat-value" id="skills">0</div>
-   </div>
-   <div class="stat">
-    <div class="stat-name">Репутация</div>
-    <div class="stat-value" id="reputation">0</div>
-   </div>
-   <div class="stat">
-    <div class="stat-name">Здоровье</div>
-    <div class="stat-value" id="health">100</div>
-   </div>
-   <div class="stat">
-    <div class="stat-name">Отношения</div>
-    <div class="stat-value" id="relations">50</div>
-   </div>
+   <div class="stat"><div class="stat-name">Деньги</div><div class="stat-value money" id="money">0 ₽</div></div>
+   <div class="stat"><div class="stat-name">Образование</div><div class="stat-value" id="education">0</div></div>
+   <div class="stat"><div class="stat-name">Навыки</div><div class="stat-value" id="skills">0</div></div>
+   <div class="stat"><div class="stat-name">Репутация</div><div class="stat-value" id="reputation">0</div></div>
+   <div class="stat"><div class="stat-name">Здоровье</div><div class="stat-value" id="health">100</div></div>
+   <div class="stat"><div class="stat-name">Отношения</div><div class="stat-value" id="relations">50</div></div>
   </div>
  </div>
 
- <div class="card event hidden" id="eventCard">
-  <div class="event-tag" id="eventTag">СОБЫТИЕ</div>
-  <div class="event-title" id="eventTitle"></div>
-  <div class="event-description" id="eventDescription"></div>
-  <div id="choices"></div>
+ <div class="nav">
+  <button class="active" data-tab="home" onclick="openTab('home')">Главная</button>
+  <button data-tab="actions" onclick="openTab('actions')">Действия</button>
+  <button data-tab="careers" onclick="openTab('careers')">Профессии</button>
  </div>
 
- <button id="nextButton" onclick="nextYear()">Продолжить год →</button>
+ <section id="tab-home">
+  <div class="card">
+   <div class="eyebrow">ТВОЙ ПУТЬ</div>
+   <h2 style="margin-top:10px">Что будешь делать?</h2>
+   <p class="muted small">Ты сам выбираешь направление. Необязательно следовать какому-то одному сценарию.</p>
+   <div class="action-grid">
+    <button class="action" onclick="openTab('actions')"><strong>📚 Учёба</strong><span>Получай образование</span></button>
+    <button class="action" onclick="openTab('careers')"><strong>💼 Карьера</strong><span>Выбирай профессию</span></button>
+    <button class="action" onclick="openTab('careers','Спорт')"><strong>🏆 Спорт</strong><span>Стань спортсменом</span></button>
+    <button class="action" onclick="openTab('actions')"><strong>🤝 Общение</strong><span>Развивай отношения</span></button>
+   </div>
+  </div>
+
+  <div class="card event" id="eventCard">
+   <div class="eyebrow">СОБЫТИЕ ТВОЕЙ ЖИЗНИ</div>
+   <div class="event-title" id="eventTitle">Начало истории</div>
+   <div class="event-description" id="eventDescription">Твоя жизнь начинается.</div>
+  </div>
+
+  <div class="card">
+   <h2>Следующий год</h2>
+   <p class="info">Когда закончишь свои дела за этот год, нажми кнопку. Возраст увеличится на один год, а мир продолжит меняться.</p>
+   <button onclick="nextYear()" id="nextButton">Продолжить год →</button>
+  </div>
+ </section>
+
+ <section id="tab-actions" class="hidden">
+  <div class="card">
+   <div class="eyebrow">СВОБОДНЫЕ ДЕЙСТВИЯ</div>
+   <h2 style="margin-top:10px">Сам решай, чем заняться</h2>
+   <p class="info">Действия можно выполнять в любом порядке. У каждого есть свои последствия.</p>
+   <div class="action-grid">
+    <button class="action" onclick="doAction('study')"><strong>📚 Учиться</strong><span>Образование + навыки</span></button>
+    <button class="action" onclick="doAction('train')"><strong>🏃 Тренироваться</strong><span>Навыки + здоровье</span></button>
+    <button class="action" onclick="doAction('work')"><strong>💼 Работать</strong><span>Заработать деньги</span></button>
+    <button class="action" onclick="doAction('rest')"><strong>🌿 Отдыхать</strong><span>Восстановить здоровье</span></button>
+    <button class="action" onclick="doAction('social')"><strong>🤝 Общаться</strong><span>Отношения + репутация</span></button>
+    <button class="action" onclick="doAction('hobby')"><strong>🎨 Хобби</strong><span>Развивать навыки</span></button>
+   </div>
+   <p class="info" id="actionResult">Выбери действие. Некоторые занятия требуют определённого возраста.</p>
+  </div>
+ </section>
+
+ <section id="tab-careers" class="hidden">
+  <div class="card">
+   <div class="eyebrow">КАТАЛОГ ПРОФЕССИЙ</div>
+   <h2 style="margin-top:10px">Кем ты хочешь стать?</h2>
+   <p class="info">Выбирай любую профессию. Для некоторых направлений понадобятся образование и навыки.</p>
+   <input id="careerSearch" placeholder="Поиск профессии..." oninput="renderCareers()">
+   <select id="careerCategory" onchange="renderCareers()">
+    <option value="Все">Все направления</option>
+    <option>Спорт</option>
+    <option>Медицина</option>
+    <option>Технологии</option>
+    <option>Бизнес</option>
+    <option>Творчество</option>
+    <option>Транспорт</option>
+    <option>Наука</option>
+    <option>Общество</option>
+    <option>Рабочие профессии</option>
+   </select>
+   <div class="small muted" id="careerCount"></div>
+   <div class="career-list" id="careerList"></div>
+  </div>
+  <div class="card">
+   <h2>Твоя карьера</h2>
+   <div id="myCareer" class="muted small">Ты пока не выбрал профессию.</div>
+   <button class="secondary" onclick="quitCareer()">Сменить профессию</button>
+  </div>
+ </section>
 
  <div class="card">
   <h2>История жизни</h2>
-  <div class="history" id="history">
-   <div class="muted small">Твоя история только начинается.</div>
-  </div>
+  <div class="history" id="history"></div>
  </div>
 
  <button class="secondary" onclick="newLife()">Начать новую жизнь</button>
-
 </section>
 
 <div class="footer">LIFE PATH · EVERY CHOICE MATTERS</div>
 </div>
 
 <script>
-const SAVE_KEY = "lifePath_v01";
+const SAVE_KEY="lifePath_v01";
+let player=null;
 
-let player = null;
+const tg=window.Telegram?.WebApp;
+if(tg){
+ tg.ready();
+ tg.expand();
+}
 
-const backgrounds = [
+const backgrounds=[
  "Ты родился в семье со средним достатком.",
  "Ты родился в обеспеченной семье.",
  "Твоя семья живёт скромно, но старается дать тебе всё необходимое.",
@@ -167,254 +234,391 @@ const backgrounds = [
  "Ты родился в большом городе."
 ];
 
-const events = [
+/*
+Профессии:
+название | направление | образование | навыки | зарплата
+*/
 
-{
- min:0,max:0,
- title:"Начало истории",
- description:"Ты появился на свет. Твоя жизнь начинается. Каким будет твоё детство?",
- choices:[
-  {text:"Расти в спокойной семейной обстановке",relations:5,health:3},
-  {text:"Расти в активной и общительной семье",relations:8,skills:2},
-  {text:"С детства привыкать к самостоятельности",skills:5}
- ]
-},
+const rawCareers=[
+["Футболист","Спорт",5,15,180000],
+["Хоккеист","Спорт",5,18,170000],
+["Баскетболист","Спорт",5,15,130000],
+["Волейболист","Спорт",5,14,100000],
+["Теннисист","Спорт",5,18,120000],
+["Боксёр","Спорт",3,18,100000],
+["Боец ММА","Спорт",3,20,130000],
+["Пловец","Спорт",5,16,90000],
+["Легкоатлет","Спорт",5,15,85000],
+["Гимнаст","Спорт",5,18,90000],
+["Фигурист","Спорт",5,18,110000],
+["Лыжник","Спорт",5,15,95000],
+["Биатлонист","Спорт",5,17,110000],
+["Гонщик","Спорт",5,20,180000],
+["Киберспортсмен","Спорт",5,16,140000],
+["Шахматист","Спорт",10,18,100000],
+["Борец","Спорт",3,18,100000],
+["Тяжелоатлет","Спорт",3,18,95000],
+["Велогонщик","Спорт",5,17,100000],
+["Спортивный тренер","Спорт",15,18,100000],
+["Фитнес-тренер","Спорт",10,15,85000],
+["Спортивный журналист","Спорт",25,12,90000],
 
-{
- min:1,max:6,
- title:"Первые увлечения",
- description:"Ты постепенно познаёшь окружающий мир. Чем тебе интереснее заниматься?",
- choices:[
-  {text:"Играть и исследовать мир",skills:3,health:2},
-  {text:"Рисовать и придумывать истории",skills:4,education:1},
-  {text:"Проводить время с близкими",relations:5}
- ]
-},
+["Хирург","Медицина",65,25,220000],
+["Стоматолог","Медицина",55,20,180000],
+["Терапевт","Медицина",55,18,130000],
+["Кардиолог","Медицина",65,23,190000],
+["Невролог","Медицина",65,22,180000],
+["Педиатр","Медицина",55,18,140000],
+["Психолог","Медицина",45,18,110000],
+["Фармацевт","Медицина",45,15,100000],
+["Ветеринар","Медицина",50,18,130000],
+["Медсестра","Медицина",35,14,85000],
+["Фельдшер","Медицина",35,15,85000],
+["Офтальмолог","Медицина",60,20,160000],
 
-{
- min:7,max:13,
- title:"Школьные годы",
- description:"Ты пошёл в школу. Как будешь проводить свободное время?",
- choices:[
-  {text:"Уделять больше времени учёбе",education:5,skills:1},
-  {text:"Заниматься спортом и хобби",health:3,skills:3},
-  {text:"Знакомиться и общаться",relations:5,reputation:1}
- ]
-},
+["Программист","Технологии",20,20,180000],
+["Веб-разработчик","Технологии",15,18,150000],
+["Разработчик игр","Технологии",20,20,170000],
+["Дизайнер интерфейсов","Технологии",15,17,130000],
+["Специалист по кибербезопасности","Технологии",30,23,190000],
+["Системный администратор","Технологии",15,16,110000],
+["Инженер робототехники","Технологии",45,22,180000],
+["Инженер-программист","Технологии",40,22,170000],
+["Аналитик данных","Технологии",35,20,160000],
+["Специалист по ИИ","Технологии",45,24,220000],
+["Тестировщик ПО","Технологии",10,14,95000],
+["Разработчик приложений","Технологии",20,20,160000],
+["3D-моделлер","Технологии",15,18,120000],
 
-{
- min:14,max:17,
- title:"Первые серьёзные решения",
- description:"Ты взрослеешь. Появляется возможность выбрать направление, которое будет интересно развивать.",
- choices:[
-  {text:"Сосредоточиться на учёбе",education:5,skills:2},
-  {text:"Осваивать практические навыки",skills:6},
-  {text:"Развивать общение и знакомства",relations:4,reputation:3}
- ]
-},
+["Предприниматель","Бизнес",15,20,200000],
+["Владелец магазина","Бизнес",10,15,120000],
+["Руководитель компании","Бизнес",40,25,250000],
+["Маркетолог","Бизнес",25,18,140000],
+["Бухгалтер","Бизнес",30,16,110000],
+["Экономист","Бизнес",40,18,140000],
+["Финансовый аналитик","Бизнес",45,22,180000],
+["Менеджер","Бизнес",20,15,100000],
+["Бизнес-консультант","Бизнес",40,22,180000],
+["Риелтор","Бизнес",10,17,130000],
+["Банковский специалист","Бизнес",25,16,120000],
+["Логист","Бизнес",25,17,125000],
+["HR-специалист","Бизнес",25,17,110000],
 
-{
- min:18,max:24,
- title:"Начало взрослой жизни",
- description:"Школа позади. Перед тобой открывается несколько путей. Что выберешь?",
- choices:[
-  {text:"Поступить в университет",education:8,money:-3000,skills:2},
-  {text:"Устроиться на работу",money:8000,skills:3},
-  {text:"Попробовать открыть своё дело",money:-2000,skills:5,reputation:2}
- ]
-},
+["Актёр","Творчество",10,20,130000],
+["Режиссёр","Творчество",35,22,180000],
+["Музыкант","Творчество",10,20,120000],
+["Певец","Творчество",5,20,130000],
+["Художник","Творчество",5,18,85000],
+["Фотограф","Творчество",10,17,95000],
+["Видеограф","Творчество",10,18,110000],
+["Монтажёр видео","Творчество",10,17,100000],
+["Писатель","Творчество",10,18,90000],
+["Сценарист","Творчество",25,20,130000],
+["Журналист","Творчество",30,18,110000],
+["Дизайнер одежды","Творчество",20,19,120000],
+["Архитектор","Творчество",50,22,160000],
+["Аниматор","Творчество",15,18,110000],
+["Иллюстратор","Творчество",10,18,95000],
+["Продюсер","Творчество",30,22,180000],
+["Блогер","Творчество",5,18,100000],
+["Стример","Творчество",5,18,90000],
 
-{
- min:25,max:39,
- title:"Новые возможности",
- description:"Ты уже многое попробовал. Появляется шанс изменить своё положение.",
- choices:[
-  {text:"Развивать карьеру",money:12000,skills:4,reputation:3},
-  {text:"Получить дополнительное образование",education:5,skills:4,money:-3000},
-  {text:"Уделить больше внимания близким",relations:7,health:2}
- ]
-},
+["Пилот самолёта","Транспорт",60,22,220000],
+["Машинист поезда","Транспорт",35,18,150000],
+["Водитель грузовика","Транспорт",10,14,100000],
+["Таксист","Транспорт",5,12,70000],
+["Автомеханик","Транспорт",15,18,110000],
+["Автоинженер","Транспорт",40,22,170000],
+["Капитан судна","Транспорт",50,22,190000],
+["Диспетчер аэропорта","Транспорт",40,20,160000],
+["Автодизайнер","Транспорт",35,22,170000],
 
-{
- min:40,max:59,
- title:"Проверка временем",
- description:"За плечами большой жизненный опыт. Какой приоритет ты выберешь сейчас?",
- choices:[
-  {text:"Продолжить развивать карьеру",money:15000,reputation:5},
-  {text:"Начать новый проект",skills:5,money:-5000},
-  {text:"Больше времени уделять себе и семье",health:5,relations:5}
- ]
-},
+["Учёный-физик","Наука",60,24,180000],
+["Химик","Наука",50,22,150000],
+["Биолог","Наука",50,20,140000],
+["Астроном","Наука",55,23,160000],
+["Геолог","Наука",40,20,145000],
+["Эколог","Наука",35,18,120000],
+["Археолог","Наука",45,20,130000],
+["Математик","Наука",50,23,170000],
+["Метеоролог","Наука",35,18,120000],
+["Лаборант","Наука",20,14,85000],
 
-{
- min:60,max:100,
- title:"Новый этап",
- description:"Ты прошёл большой жизненный путь. Что для тебя сейчас важнее всего?",
- choices:[
-  {text:"Передавать свой опыт другим",reputation:5,relations:5},
-  {text:"Заниматься любимым делом",health:3,skills:3},
-  {text:"Проводить время с близкими",relations:8,health:2}
- ]
-}
+["Учитель","Общество",35,17,85000],
+["Преподаватель университета","Общество",55,22,130000],
+["Юрист","Общество",45,20,160000],
+["Адвокат","Общество",55,23,200000],
+["Судья","Общество",65,24,220000],
+["Дипломат","Общество",60,23,200000],
+["Переводчик","Общество",30,20,120000],
+["Социальный работник","Общество",25,16,85000],
+["Государственный служащий","Общество",35,18,120000],
+["Политолог","Общество",40,20,140000],
 
+["Электрик","Рабочие профессии",10,17,100000],
+["Сварщик","Рабочие профессии",10,18,120000],
+["Строитель","Рабочие профессии",5,15,100000],
+["Архитектор-строитель","Рабочие профессии",45,22,160000],
+["Повар","Рабочие профессии",10,16,95000],
+["Кондитер","Рабочие профессии",10,17,90000],
+["Парикмахер","Рабочие профессии",5,15,80000],
+["Сантехник","Рабочие профессии",10,16,95000],
+["Столяр","Рабочие профессии",10,17,95000],
+["Фермер","Рабочие профессии",5,16,90000],
+["Пожарный","Рабочие профессии",20,19,110000],
+["Спасатель","Рабочие профессии",20,20,120000],
+["Электромонтажник","Рабочие профессии",15,18,110000]
+];
+
+const careers=rawCareers.map((x,i)=>({
+ id:i,
+ name:x[0],category:x[1],education:x[2],
+ skills:x[3],salary:x[4]
+}));
+
+const events=[
+ "Ты познакомился с интересным человеком.",
+ "В твоём городе открылась новая возможность для развития.",
+ "Ты узнал что-то новое, что может пригодиться в будущем.",
+ "Тебе предложили попробовать себя в незнакомом деле.",
+ "Ты провёл время с близкими людьми.",
+ "Ты задумался о своих будущих целях.",
+ "Ты увидел пример человека, который добился успеха.",
+ "У тебя появился новый интерес.",
+ "Ты получил полезный жизненный опыт.",
+ "В этом году ты стал немного лучше понимать себя."
 ];
 
 function createCharacter(){
  const name=document.getElementById("nameInput").value.trim();
-
- if(!name){
-  alert("Сначала введи имя персонажа.");
-  return;
- }
+ if(!name){alert("Введи имя персонажа.");return;}
 
  player={
-  name:name,
-  age:0,
-  money:0,
-  education:0,
-  skills:0,
-  reputation:0,
-  health:100,
-  relations:50,
+  name,age:0,money:0,education:0,skills:0,
+  reputation:0,health:100,relations:50,
   background:backgrounds[Math.floor(Math.random()*backgrounds.length)],
-  history:[],
-  eventDone:false,
-  finished:false
+  history:[],career:null,careerLevel:0,
+  finished:false,actionsThisYear:0,
+  lastEvent:"Ты появился на свет. Началась твоя история."
  };
 
- player.history.push({
-  age:0,
-  text:"Ты появился на свет. Началась твоя история."
- });
-
+ player.history.push({age:0,text:"Ты появился на свет. Началась твоя история."});
  document.getElementById("startScreen").classList.add("hidden");
  document.getElementById("gameScreen").classList.remove("hidden");
-
- save();
- render();
- showEvent();
+ save();render();openTab("home");
 }
 
 function getStage(age){
- if(age<=6)return "Раннее детство";
+ if(age<=2)return "Раннее детство";
+ if(age<=6)return "Детство";
  if(age<=13)return "Школьные годы";
  if(age<=17)return "Подростковый возраст";
  if(age<=24)return "Начало взрослой жизни";
  if(age<=39)return "Развитие и карьера";
  if(age<=59)return "Зрелость";
  if(age<=100)return "Поздние годы";
- return "Конец истории";
+ return "История завершена";
 }
 
-function getEvent(){
- return events.find(e=>player.age>=e.min&&player.age<=e.max);
+function openTab(tab,category){
+ ["home","actions","careers"].forEach(t=>{
+  document.getElementById("tab-"+t).classList.toggle("hidden",t!==tab);
+ });
+ document.querySelectorAll(".nav button").forEach(b=>{
+  b.classList.toggle("active",b.dataset.tab===tab);
+ });
+ if(tab==="careers"){
+  if(category)document.getElementById("careerCategory").value=category;
+  renderCareers();
+ }
 }
 
-function showEvent(){
- const event=getEvent();
-
- if(!event)return;
-
- document.getElementById("eventCard").classList.remove("hidden");
- document.getElementById("eventTag").textContent=
-  "СОБЫТИЕ · "+player.age+" ЛЕТ";
- document.getElementById("eventTitle").textContent=event.title;
- document.getElementById("eventDescription").textContent=event.description;
-
- const box=document.getElementById("choices");
- box.innerHTML="";
-
- event.choices.forEach(choice=>{
-  const button=document.createElement("button");
-  button.className="choice";
-  button.textContent=choice.text;
-  button.onclick=()=>choose(choice);
-  box.appendChild(button);
- });
-
- document.getElementById("nextButton").disabled=true;
+function addHistory(text){
+ player.history.push({age:player.age,text});
+ if(player.history.length>500)player.history.shift();
 }
 
-function choose(choice){
- if(player.eventDone)return;
+function changeStat(key,value){
+ player[key]=Math.max(0,Math.min(key==="money"?100000000:100,player[key]+value));
+}
 
- const changes=[];
+function doAction(action){
+ if(!player||player.finished)return;
 
- Object.keys(choice).forEach(key=>{
-  if(key==="text")return;
+ if(player.age<3 && action!=="rest" && action!=="social"){
+  showResult("Ты пока слишком мал для этого занятия.");
+  return;
+ }
 
-  if(typeof player[key]==="number"){
-   player[key]+=choice[key];
-   changes.push(key);
-  }
+ if(player.actionsThisYear>=5){
+  showResult("В этом году ты уже выполнил пять действий. Продолжай год, чтобы начать новый.");
+  return;
+ }
+
+ let message="";
+
+ if(action==="study"){
+  if(player.age<6){showResult("До школы ещё рано. Пока можно отдыхать и общаться.");return;}
+  changeStat("education",player.age<18?3:2);
+  changeStat("skills",2);
+  message="Ты уделил время учёбе и получил новые знания.";
+ }
+
+ if(action==="train"){
+  changeStat("skills",3);
+  changeStat("health",player.age<60?2:-1);
+  message="Ты провёл тренировку и развил свои навыки.";
+ }
+
+ if(action==="work"){
+  if(player.age<14){showResult("Ты пока слишком молод для работы.");return;}
+  let income=player.age<18?1500:player.career?Math.round(careers[player.career].salary*0.12):5000;
+  changeStat("money",income);
+  changeStat("skills",1);
+  message="Ты поработал и заработал "+income.toLocaleString("ru-RU")+" ₽.";
+ }
+
+ if(action==="rest"){
+  changeStat("health",5);
+  message="Ты хорошо отдохнул и восстановил силы.";
+ }
+
+ if(action==="social"){
+  changeStat("relations",4);
+  changeStat("reputation",1);
+  message="Ты провёл время с другими людьми и укрепил отношения.";
+ }
+
+ if(action==="hobby"){
+  changeStat("skills",2);
+  changeStat("relations",1);
+  message="Ты посвятил время любимому занятию.";
+ }
+
+ player.actionsThisYear++;
+ addHistory(message);
+ showResult(message);
+ save();render();
+}
+
+function showResult(message){
+ document.getElementById("actionResult").textContent=message;
+}
+
+function selectCareer(id){
+ if(!player||player.finished)return;
+ const c=careers.find(x=>x.id===id);
+ if(!c)return;
+
+ if(player.age<14){
+  alert("Пока рано начинать профессиональную карьеру. Ты можешь заранее выбрать направление и готовиться к нему.");
+  return;
+ }
+
+ player.career=id;
+ player.careerLevel=0;
+ addHistory("Ты выбрал профессиональное направление: "+c.name+".");
+ save();render();
+ alert("Ты выбрал профессию: "+c.name+". Теперь развивай навыки и образование!");
+}
+
+function quitCareer(){
+ if(player.career===null)return;
+ const old=careers[player.career].name;
+ player.career=null;
+ player.careerLevel=0;
+ addHistory("Ты решил сменить профессиональное направление после работы в сфере: "+old+".");
+ save();render();
+}
+
+function renderCareers(){
+ const search=(document.getElementById("careerSearch").value||"").toLowerCase();
+ const category=document.getElementById("careerCategory").value;
+ const list=document.getElementById("careerList");
+ list.innerHTML="";
+
+ const filtered=careers.filter(c=>
+  c.name.toLowerCase().includes(search)&&
+  (category==="Все"||c.category===category)
+ );
+
+ document.getElementById("careerCount").textContent=
+  "Найдено профессий: "+filtered.length+" из "+careers.length;
+
+ filtered.forEach(c=>{
+  const item=document.createElement("div");
+  item.className="career";
+
+  const top=document.createElement("div");
+  top.className="career-top";
+
+  const name=document.createElement("div");
+  name.className="career-name";
+  name.textContent=c.name;
+
+  const tag=document.createElement("span");
+  tag.className="tag";
+  tag.textContent=c.category;
+
+  top.append(name,tag);
+
+  const meta=document.createElement("div");
+  meta.className="career-meta";
+  meta.textContent=
+   "Образование: "+c.education+"/100 · Навыки: "+c.skills+"/100"+
+   " · Доход при развитой карьере: "+c.salary.toLocaleString("ru-RU")+" ₽/мес.";
+
+  const btn=document.createElement("button");
+  btn.className="secondary";
+  btn.textContent=player.career===c.id?"Твоя профессия":"Выбрать профессию";
+  btn.onclick=()=>selectCareer(c.id);
+
+  item.append(top,meta,btn);
+  list.appendChild(item);
  });
-
- ["education","skills","reputation","health","relations"].forEach(key=>{
-  player[key]=Math.max(0,Math.min(100,player[key]));
- });
-
- player.money=Math.max(0,player.money);
-
- player.history.push({
-  age:player.age,
-  text:choice.text
- });
-
- player.eventDone=true;
-
- document.getElementById("eventCard").classList.add("hidden");
-
- save();
- render();
 }
 
 function nextYear(){
- if(!player||!player.eventDone||player.finished)return;
+ if(!player||player.finished)return;
 
  if(player.age>=100){
-  finishLife();
+  player.finished=true;
+  addHistory("Твоя история завершена. Ты прожил целую жизнь.");
+  save();render();
+  alert("История завершена!");
   return;
  }
 
  player.age++;
+ player.actionsThisYear=0;
 
- player.eventDone=false;
+ if(player.age>=18&&player.career!==null){
+  const c=careers[player.career];
+  const qualified=player.education>=c.education&&player.skills>=c.skills;
 
- if(player.age===18){
-  player.history.push({
-   age:18,
-   text:"Тебе исполнилось 18 лет. Началась взрослая жизнь."
-  });
+  if(qualified){
+   const income=Math.round(c.salary*(1+player.careerLevel*0.1));
+   changeStat("money",income*12);
+   addHistory("Ты работал по профессии «"+c.name+"» и получил "+(income*12).toLocaleString("ru-RU")+" ₽ за год.");
+   if(player.careerLevel<10&&player.age%3===0){
+    player.careerLevel++;
+    addHistory("Твой профессиональный уровень повысился.");
+   }
+  }else{
+   addHistory("Ты продолжаешь подготовку к профессии «"+c.name+"». Пока не хватает образования или навыков.");
+  }
  }
 
- if(player.age===100){
-  player.history.push({
-   age:100,
-   text:"Тебе исполнилось 100 лет. Твоя история подходит к концу."
-  });
- }
+ const event=events[Math.floor(Math.random()*events.length)];
+ player.lastEvent=event;
+ addHistory(event);
 
- showEvent();
- save();
- render();
-}
+ if(player.age===7)addHistory("Ты достиг школьного возраста.");
+ if(player.age===18)addHistory("Ты стал совершеннолетним. Перед тобой открылись новые возможности.");
+ if(player.age===60)addHistory("Начался новый этап жизни.");
 
-function finishLife(){
- player.finished=true;
- player.eventDone=true;
-
- document.getElementById("eventCard").classList.add("hidden");
- document.getElementById("nextButton").disabled=true;
-
- player.history.push({
-  age:player.age,
-  text:"История завершена. Ты прожил целую жизнь в LIFE PATH."
- });
-
- save();
- render();
-
- alert("Твоя история завершена!");
+ save();render();
+ openTab("home");
 }
 
 function render(){
@@ -425,12 +629,27 @@ function render(){
  document.getElementById("characterName").textContent="Персонаж: "+player.name;
  document.getElementById("background").textContent=player.background;
 
- document.getElementById("money").textContent=
-  player.money.toLocaleString("ru-RU")+" ₽";
+ document.getElementById("money").textContent=player.money.toLocaleString("ru-RU")+" ₽";
 
  ["education","skills","reputation","health","relations"].forEach(key=>{
   document.getElementById(key).textContent=player[key];
  });
+
+ document.getElementById("eventTitle").textContent="Событие · "+player.age+" лет";
+ document.getElementById("eventDescription").textContent=player.lastEvent||"Твоя история продолжается.";
+
+ const careerInfo=document.getElementById("careerInfo");
+ const myCareer=document.getElementById("myCareer");
+
+ if(player.career!==null&&careers[player.career]){
+  const c=careers[player.career];
+  careerInfo.innerHTML='<span class="pill">'+c.name+'</span><span class="pill">Уровень '+player.careerLevel+'</span>';
+  myCareer.textContent=c.name+" · Уровень "+player.careerLevel+
+   ". Необходимые показатели: образование "+c.education+", навыки "+c.skills+".";
+ }else{
+  careerInfo.innerHTML='<span class="pill">Профессия не выбрана</span>';
+  myCareer.textContent="Ты пока не выбрал профессию.";
+ }
 
  const history=document.getElementById("history");
  history.innerHTML="";
@@ -446,19 +665,13 @@ function render(){
   const text=document.createElement("span");
   text.textContent=item.text;
 
-  div.appendChild(age);
-  div.appendChild(text);
+  div.append(age,text);
   history.appendChild(div);
  });
 
- document.getElementById("nextButton").disabled=
-  !player.eventDone||player.finished;
-
- if(player.finished){
-  document.getElementById("nextButton").textContent="История завершена";
- }else{
-  document.getElementById("nextButton").textContent="Продолжить год →";
- }
+ document.getElementById("nextButton").textContent=
+  player.finished?"История завершена":"Продолжить год →";
+ document.getElementById("nextButton").disabled=player.finished;
 }
 
 function save(){
@@ -467,36 +680,41 @@ function save(){
 
 function newLife(){
  if(!confirm("Начать новую жизнь? Старый прогресс будет удалён."))return;
-
  localStorage.removeItem(SAVE_KEY);
  location.reload();
 }
 
 function loadGame(){
  const data=localStorage.getItem(SAVE_KEY);
-
  if(!data)return;
 
  try{
-  const loaded=JSON.parse(data);
+  const p=JSON.parse(data);
+  if(!p||typeof p.name!=="string"||typeof p.age!=="number"||!Array.isArray(p.history))return;
 
-  if(!loaded||typeof loaded.name!=="string"||
-     typeof loaded.age!=="number"||
-     !Array.isArray(loaded.history))return;
+  player={
+   ...p,
+   money:Number(p.money)||0,
+   education:Number(p.education)||0,
+   skills:Number(p.skills)||0,
+   reputation:Number(p.reputation)||0,
+   health:Number(p.health??100),
+   relations:Number(p.relations??50),
+   history:p.history,
+   career:p.career===undefined?null:p.career,
+   careerLevel:Number(p.careerLevel)||0,
+   actionsThisYear:0,
+   lastEvent:p.lastEvent||"Твоя история продолжается.",
+   finished:!!p.finished
+  };
 
-  player=loaded;
+  if(player.career!==null&&!careers[player.career])player.career=null;
 
   document.getElementById("startScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
-
   render();
-
-  if(!player.eventDone&&!player.finished){
-   showEvent();
-  }
-
- }catch(error){
-  console.log("Ошибка загрузки сохранения",error);
+ }catch(e){
+  console.log("Ошибка загрузки",e);
  }
 }
 
