@@ -22,7 +22,7 @@ header{padding:22px 17px 17px;background:linear-gradient(135deg,#101d34,#0b1221)
 .stat{background:var(--panel2);padding:13px;border-radius:13px}
 .stat .value{font-size:19px;font-weight:850;margin-top:5px}
 .stat .name{font-size:11px;color:var(--muted)}
-button.primary,button.secondary,button.danger,button.ghost{border:0;border-radius:13px;padding:13px 14px;font-weight:800;transition:transform .15s,opacity .15s,background .2s}
+button.primary,button.secondary,button.danger,button.ghost{border:0;border-radius:13px;padding:13px 14px;font-weight:800;transition:transform .15s,opacity .15s}
 button:active{transform:scale(.97)}
 button.primary{background:var(--blue);color:white}
 button.secondary{background:#263650;color:white}
@@ -76,6 +76,15 @@ label{font-size:12px;color:var(--muted)}
 .selected-category-icon{width:43px;height:43px;border-radius:13px;background:#29466e;display:grid;place-items:center;font-size:22px}
 .profession-card{background:#121e31;border:1px solid var(--border);border-radius:15px;padding:14px;margin-bottom:9px}
 .profession-card button{font-size:12px}
+.requirement{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid var(--border);font-size:12px}
+.requirement:last-child{border:0}
+.requirement-name{color:var(--muted)}
+.requirement-status{font-weight:800;text-align:right}
+.requirement-status.ok{color:var(--green)}
+.requirement-status.no{color:var(--red)}
+.job-task{background:linear-gradient(145deg,#172b46,#111a2b);border:1px solid #2b4567;border-radius:15px;padding:14px;margin:10px 0}
+.job-task h4{margin:0 0 7px;font-size:14px}
+.job-task p{font-size:12px;line-height:1.5;color:var(--muted)}
 .year-screen{animation:yearAppear .55s cubic-bezier(.2,.8,.2,1) both}
 @keyframes yearAppear{from{opacity:0;transform:translateY(25px) scale(.98);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 .year-hero{position:relative;overflow:hidden;text-align:center;padding:27px 18px 25px;border-radius:22px;background:linear-gradient(145deg,#18345d,#101b30 70%);border:1px solid #31517c;margin-bottom:15px}
@@ -180,7 +189,6 @@ const careerLevels=[
 {name:"Топ-руководитель",salary:550000,years:25}
 ];
 
-/* Виды бизнеса */
 const businessTypes=[
 {id:"cafe",name:"Кафе или ресторан",icon:"☕",description:"Общепит, обслуживание клиентов и постоянные расходы.",cost:180000,base:105000,risk:12},
 {id:"shop",name:"Магазин",icon:"🏪",description:"Продажа товаров, закупки и работа с покупателями.",cost:140000,base:85000,risk:10},
@@ -190,7 +198,185 @@ const businessTypes=[
 {id:"factory",name:"Производство",icon:"🏭",description:"Выпуск продукции, оборудование и крупные заказы.",cost:500000,base:300000,risk:22}
 ];
 
-/* События */
+/* Требования для профессий */
+const educationNames=["Не требуется","Школа","Колледж","Высшее образование","Магистратура","Аспирантура"];
+
+/* У каждой профессии своя базовая сложность.
+   Индекс профессии внутри направления также влияет на требования. */
+const professionOverrides={
+"Медбрат":{age:18,education:2,skills:18,reputation:3},
+"Медсестра":{age:18,education:2,skills:18,reputation:3},
+"Фельдшер":{age:20,education:2,skills:27,reputation:4},
+"Врач-терапевт":{age:24,education:3,skills:42,reputation:7},
+"Хирург":{age:27,education:4,skills:65,reputation:12},
+"Кардиолог":{age:27,education:4,skills:62,reputation:11},
+"Невролог":{age:26,education:4,skills:58,reputation:10},
+"Педиатр":{age:25,education:3,skills:48,reputation:8},
+"Стоматолог":{age:25,education:3,skills:48,reputation:8},
+"Психолог":{age:23,education:3,skills:40,reputation:7},
+"Фармацевт":{age:22,education:2,skills:30,reputation:5},
+"Ветеринар":{age:24,education:3,skills:45,reputation:7},
+"Реабилитолог":{age:23,education:3,skills:38,reputation:6},
+"Лаборант":{age:18,education:1,skills:16,reputation:2},
+"Техподдержка":{age:18,education:1,skills:12,reputation:2},
+"Тестировщик":{age:18,education:1,skills:20,reputation:3},
+"Веб-разработчик":{age:18,education:1,skills:24,reputation:3},
+"Программист":{age:19,education:2,skills:30,reputation:4},
+"Мобильный разработчик":{age:20,education:2,skills:38,reputation:5},
+"Системный администратор":{age:19,education:2,skills:30,reputation:4},
+"Инженер":{age:22,education:3,skills:42,reputation:6},
+"Специалист по кибербезопасности":{age:22,education:3,skills:55,reputation:8},
+"Аналитик данных":{age:21,education:3,skills:45,reputation:6},
+"Разработчик игр":{age:20,education:2,skills:40,reputation:5},
+"Архитектор ПО":{age:25,education:4,skills:68,reputation:12},
+"Технический директор":{age:30,education:4,skills:80,reputation:18},
+"Продавец":{age:18,education:0,skills:5,reputation:1},
+"Менеджер по продажам":{age:18,education:1,skills:18,reputation:3},
+"Маркетолог":{age:19,education:2,skills:28,reputation:4},
+"Бухгалтер":{age:20,education:2,skills:30,reputation:4},
+"Предприниматель":{age:18,education:0,skills:25,reputation:5},
+"Финансовый аналитик":{age:22,education:3,skills:48,reputation:7},
+"Бизнес-аналитик":{age:21,education:3,skills:42,reputation:6},
+"Руководитель отдела":{age:25,education:3,skills:55,reputation:10},
+"Директор компании":{age:30,education:4,skills:75,reputation:18},
+"Инвестор":{age:23,education:2,skills:50,reputation:8},
+"Банковский специалист":{age:20,education:2,skills:30,reputation:4},
+"Управляющий":{age:25,education:3,skills:55,reputation:10},
+"Пилот":{age:23,education:3,skills:60,reputation:9},
+"Машинист":{age:21,education:2,skills:38,reputation:5},
+"Капитан судна":{age:28,education:3,skills:65,reputation:12},
+"Руководитель автопарка":{age:27,education:3,skills:58,reputation:11},
+"Дипломат":{age:25,education:4,skills:60,reputation:12},
+"Депутат":{age:25,education:3,skills:55,reputation:15},
+"Мэр":{age:30,education:4,skills:70,reputation:22},
+"Губернатор":{age:35,education:4,skills:82,reputation:30},
+"Министр":{age:38,education:4,skills:90,reputation:35},
+"Ректор":{age:35,education:5,skills:85,reputation:25},
+"Преподаватель университета":{age:26,education:4,skills:60,reputation:12},
+"Директор школы":{age:28,education:3,skills:55,reputation:12},
+"Начальник производства":{age:27,education:3,skills:58,reputation:11},
+"Прораб":{age:23,education:2,skills:38,reputation:5},
+"Инженер-строитель":{age:23,education:3,skills:45,reputation:7},
+"Спортивный врач":{age:25,education:3,skills:50,reputation:8},
+"Спортивный менеджер":{age:23,education:3,skills:40,reputation:7},
+"Спортивный аналитик":{age:22,education:3,skills:42,reputation:6},
+"Режиссёр":{age:25,education:2,skills:50,reputation:10},
+"Продюсер":{age:25,education:2,skills:52,reputation:11},
+"Архитектор":{age:24,education:3,skills:50,reputation:8},
+"Научный руководитель":{age:30,education:5,skills:75,reputation:18},
+"Руководитель лаборатории":{age:30,education:4,skills:70,reputation:16}
+};
+
+function professionRequirements(name){
+if(professionOverrides[name])return {...professionOverrides[name]};
+let category=Object.keys(categories).find(c=>categories[c].includes(name))||"Рабочие профессии";
+let index=categories[category].indexOf(name);
+const base={
+"Спорт":{age:18,education:0,skills:15,reputation:2},
+"Медицина":{age:19,education:2,skills:24,reputation:4},
+"Технологии":{age:18,education:1,skills:20,reputation:3},
+"Бизнес":{age:18,education:1,skills:20,reputation:3},
+"Творчество":{age:18,education:0,skills:18,reputation:2},
+"Транспорт":{age:18,education:1,skills:20,reputation:3},
+"Наука":{age:20,education:2,skills:30,reputation:5},
+"Государство":{age:21,education:2,skills:30,reputation:6},
+"Рабочие профессии":{age:18,education:0,skills:15,reputation:2},
+"Образование":{age:20,education:2,skills:28,reputation:4},
+"Общество":{age:18,education:1,skills:18,reputation:3}
+}[category];
+return{
+age:base.age+Math.floor(index/4),
+education:Math.min(4,base.education+Math.floor(index/5)),
+skills:base.skills+index*3,
+reputation:base.reputation+Math.floor(index/2)
+}
+}
+
+/* Специальные профессии с рабочими заданиями */
+const importantProfessions=[
+"Хирург","Кардиолог","Невролог","Врач-терапевт","Стоматолог","Ветеринар",
+"Технический директор","Архитектор ПО","Специалист по кибербезопасности",
+"Программист","Мобильный разработчик","Разработчик игр",
+"Директор компании","Руководитель отдела","Финансовый аналитик","Бизнес-аналитик","Управляющий","Предприниматель","Инвестор",
+"Пилот","Машинист","Капитан судна","Руководитель автопарка",
+"Дипломат","Депутат","Мэр","Губернатор","Министр","Руководитель ведомства",
+"Режиссёр","Продюсер","Архитектор",
+"Физик","Химик","Биолог","Астроном","Научный руководитель","Руководитель лаборатории",
+"Преподаватель университета","Ректор","Директор школы",
+"Инженер-строитель","Начальник производства","Прораб",
+"Спортивный менеджер","Спортивный врач","Спортивный аналитик"
+];
+
+const taskTemplates={
+"Медицина":[
+{title:"Сложный клинический случай",description:"Разобраться в непростой ситуации пациента и подготовить план действий.",difficulty:25},
+{title:"Консилиум специалистов",description:"Представить свою оценку случая и согласовать дальнейшую работу.",difficulty:35},
+{title:"Ответственная смена",description:"Организовать работу и справиться с большим количеством задач.",difficulty:30}
+],
+"Технологии":[
+{title:"Крупный технический проект",description:"Разработать важную часть продукта и проверить её работу.",difficulty:30},
+{title:"Критическая ошибка системы",description:"Найти причину серьёзной ошибки и подготовить исправление.",difficulty:35},
+{title:"Запуск нового продукта",description:"Подготовить техническую часть проекта к запуску.",difficulty:40}
+],
+"Бизнес":[
+{title:"Переговоры с крупным клиентом",description:"Подготовить предложение и провести важные переговоры.",difficulty:30},
+{title:"Стратегия развития компании",description:"Проанализировать показатели и выбрать направление развития.",difficulty:35},
+{title:"Крупный контракт",description:"Согласовать условия сделки и организовать её выполнение.",difficulty:40}
+],
+"Транспорт":[
+{title:"Ответственный рейс",description:"Организовать и выполнить важную транспортную задачу.",difficulty:35},
+{title:"Проверка безопасности",description:"Провести комплексную проверку готовности к работе.",difficulty:30},
+{title:"Сложная логистическая задача",description:"Составить маршрут и решить проблемы с организацией перевозки.",difficulty:32}
+],
+"Государство":[
+{title:"Важное совещание",description:"Подготовить материалы и представить решение по сложному вопросу.",difficulty:38},
+{title:"Общественный проект",description:"Организовать работу нескольких участников и добиться результата.",difficulty:35},
+{title:"Сложные переговоры",description:"Найти компромисс между сторонами и согласовать решение.",difficulty:42}
+],
+"Творчество":[
+{title:"Крупный творческий проект",description:"Подготовить концепцию и организовать реализацию проекта.",difficulty:30},
+{title:"Работа с заказчиком",description:"Согласовать условия и представить готовый результат.",difficulty:28},
+{title:"Премьера проекта",description:"Подготовить запуск и справиться с ответственностью за результат.",difficulty:35}
+],
+"Наука":[
+{title:"Научное исследование",description:"Подготовить исследование, проверить данные и представить выводы.",difficulty:38},
+{title:"Экспертная оценка",description:"Проанализировать результаты и подготовить профессиональное заключение.",difficulty:35},
+{title:"Научная конференция",description:"Представить свою работу и ответить на вопросы специалистов.",difficulty:32}
+],
+"Образование":[
+{title:"Разработка учебной программы",description:"Подготовить программу обучения и оценить её результаты.",difficulty:30},
+{title:"Сложная учебная ситуация",description:"Организовать работу и найти решение непростой проблемы.",difficulty:28},
+{title:"Профессиональная аттестация",description:"Подготовить материалы и пройти экспертную оценку.",difficulty:35}
+],
+"Рабочие профессии":[
+{title:"Крупный производственный заказ",description:"Организовать выполнение заказа в срок и проверить качество.",difficulty:30},
+{title:"Ответственный объект",description:"Спланировать этапы работ и проконтролировать результат.",difficulty:35},
+{title:"Контроль качества",description:"Проверить готовую работу и устранить обнаруженные недостатки.",difficulty:28}
+],
+"Спорт":[
+{title:"Подготовка к важному соревнованию",description:"Разработать план подготовки и показать высокий результат.",difficulty:30},
+{title:"Ответственный матч",description:"Подготовиться к важному спортивному событию.",difficulty:35},
+{title:"Работа с командой",description:"Организовать подготовку и улучшить общий результат.",difficulty:28}
+],
+"Общество":[
+{title:"Сложный общественный проект",description:"Организовать помощь и согласовать действия участников.",difficulty:28},
+{title:"Ответственная задача",description:"Решить сложную ситуацию и подготовить отчёт о результатах.",difficulty:32},
+{title:"Координация команды",description:"Распределить задачи и обеспечить согласованную работу.",difficulty:30}
+]
+};
+
+const taskSpecific={
+"Хирург":["Провести подготовку к сложной операции","Организовать работу операционной команды","Разобрать сложный клинический случай"],
+"Кардиолог":["Подготовить план лечения сложного пациента","Провести экспертный разбор обследования","Представить рекомендации на консилиуме"],
+"Директор компании":["Провести переговоры с инвестором","Утвердить стратегию компании","Заключить крупный контракт"],
+"Технический директор":["Утвердить архитектуру нового продукта","Организовать устранение критической ошибки","Провести техническую оценку проекта"],
+"Пилот":["Подготовить ответственный рейс","Пройти комплексную проверку готовности","Разобрать результаты тренировочного полёта"],
+"Губернатор":["Провести совещание по региональному проекту","Согласовать программу развития региона","Решить сложный административный вопрос"],
+"Министр":["Подготовить государственную программу","Провести межведомственные переговоры","Представить отчёт о результатах работы"],
+"Режиссёр":["Подготовить съёмки крупного проекта","Согласовать творческую концепцию","Организовать работу съёмочной группы"],
+"Научный руководитель":["Подготовить исследовательский проект","Проверить результаты научной группы","Представить исследование экспертам"]
+};
+
 const events=[
 {minAge:18,title:"Сложный период",text:"В семье возникли финансовые трудности. Атмосфера дома стала напряжённой.",options:[["Помочь близким",s=>{s.money-=12000;s.relations+=5;s.familySupport+=3}],["Сосредоточиться на себе",s=>{s.relations-=3;s.health-=2}]]},
 {minAge:18,title:"Нечестное предложение",text:"Знакомый предлагает сомнительную сделку. Обещает быстрые деньги, но последствия могут быть серьёзными.",options:[["Отказаться",s=>{s.reputation+=2;s.influence+=1}],["Связаться с сомнительной компанией",s=>{s.money+=5000;s.reputation-=8;s.risk+=10}]]},
@@ -221,11 +407,11 @@ return{
 name:"",surname:"",city:"Москва",age:0,money:0,education:0,skills:0,
 reputation:0,health:100,relations:50,influence:0,connections:0,
 familySupport:0,risk:0,actionsThisYear:0,year:1,history:[],
-ambition:"",goal:"",career:null,careerLevel:0,careerYears:0,
+ambition:"",goal:"",career:null,selectedProfession:"",careerLevel:0,careerYears:0,
 employed:false,jobApplications:0,schoolProgress:0,educationPath:"school",
 educationStage:"Не начато",studyYears:0,institution:"",studyProgress:0,
 friends:0,partner:false,children:0,monthlyExpenses:0,pendingApplication:false,
-business:null
+business:null,jobTaskYear:-1,jobTaskDone:0
 }
 }
 
@@ -236,9 +422,7 @@ function load(){
 try{
 const old=JSON.parse(localStorage.getItem(KEY));
 if(!old||typeof old!=="object")return null;
-const result={...defaultState(),...old,history:Array.isArray(old.history)?old.history:[]};
-if(!("business" in result))result.business=null;
-return result
+return {...defaultState(),...old,history:Array.isArray(old.history)?old.history:[]}
 }catch(e){return null}
 }
 function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
@@ -360,18 +544,23 @@ ${options.map((o,i)=>`<div class="item"><div class="item-title">${o[0]}</div><di
 
 /* Карьера */
 function careerScreen(){
+const current=state.career;
+const canDoTasks=current&&importantProfessions.includes(current);
 return`
 <div class="section-title">Карьера и профессии</div>
-${state.career?`<div class="card"><h3>Твоя карьера</h3>
-<div class="item-title">${esc(state.career)}</div>
+${current?`<div class="card"><h3>Твоя карьера</h3>
+<div class="item-title">${esc(current)}</div>
 <span class="tag">${careerLevels[state.careerLevel].name}</span>
 <p class="item-desc">Опыт: ${state.careerYears} лет.</p>
 <p class="item-desc">Годовой доход: ${money(careerLevels[state.careerLevel].salary*12)}</p>
 <button class="secondary full" onclick="applyPromotion()">Подать заявку на повышение</button>
-<button class="ghost full" style="margin-top:8px" onclick="quitJob()">Уволиться</button></div>`:""}
+<button class="ghost full" style="margin-top:8px" onclick="quitJob()">Уволиться</button>
+</div>
+${canDoTasks?jobTasksScreen():""}
+`:""}
 <div class="career-intro"><div class="career-intro-icon">🎯</div>
 <div class="career-intro-title">Выбери своё направление</div>
-<div class="career-intro-text">Найди сферу, в которой хочешь развиваться. В каждой категории есть разные профессии — от первых должностей до руководящих позиций.</div></div>
+<div class="career-intro-text">У каждой профессии собственные требования. Изучи их до подачи заявки. Некоторые ответственные и высокооплачиваемые должности также открывают специальные рабочие задания.</div></div>
 ${state.ambition?`
 <div class="selected-category"><div class="selected-category-top">
 <div class="selected-category-icon">${categoryInfo[state.ambition]?.[0]||"🎯"}</div>
@@ -380,17 +569,135 @@ ${state.ambition?`
 <div class="item-desc">${esc(categoryInfo[state.ambition]?.[1]||"Выбранное направление карьеры.")}</div>
 <button class="ghost full" onclick="clearAmbition()">Изменить направление</button></div>
 <div class="row" style="margin:18px 2px 12px"><b>Доступные профессии</b><span class="tag">${categories[state.ambition].length} вариантов</span></div>
-${categories[state.ambition].map((p,i)=>`<div class="profession-card"><div class="row"><div class="item-title">${esc(p)}</div><span style="font-size:19px">›</span></div>
-<div class="item-desc">Построй карьеру в этой сфере. Подготовься, выполни требования и попробуй получить первую должность.</div>
-<button class="secondary full" onclick="chooseCareer(${i})">Выбрать профессию</button></div>`).join("")}
+${categories[state.ambition].map((p,i)=>`<div class="profession-card">
+<div class="row"><div class="item-title">${esc(p)}</div><span style="font-size:19px">›</span></div>
+<div class="item-desc">Изучи условия поступления на эту должность.</div>
+<button class="ghost full" onclick="showProfessionRequirements('${p}')">Посмотреть требования</button>
+<button class="secondary full" style="margin-top:7px" onclick="chooseCareer(${i})">Выбрать профессию</button>
+</div>`).join("")}
 `:`<div class="row" style="margin:18px 2px 12px"><b>Все направления</b><span class="tag">${Object.keys(categories).length} сфер</span></div>
 <div class="career-grid">${Object.keys(categories).map(name=>`<button class="career-category" onclick="setAmbition('${name}')">
 <span class="category-arrow">↗</span><div class="category-icon">${categoryInfo[name][0]}</div>
 <div class="category-name">${esc(name)}</div><div class="category-count">${categories[name].length} профессий</div></button>`).join("")}</div>`}
-${state.pendingApplication?`<div class="card" style="margin-top:15px"><h3>Подготовка к цели</h3>
+${state.pendingApplication?`<div class="card" style="margin-top:15px"><h3>Подача заявки</h3>
 <p class="item-desc">Твоя цель: <b>${esc(state.goal)}</b>.</p>
-<p class="item-desc">Для первой должности нужны возраст, навыки, образование и репутация.</p>
+${state.selectedProfession?requirementsMarkup(state.selectedProfession):""}
 <button class="primary full" onclick="applyForJob()">Подать заявку на первую работу</button></div>`:""}`
+}
+
+/* Отображение требований */
+function requirementRows(name){
+const r=professionRequirements(name);
+const rows=[
+["Возраст",state.age+" / "+r.age+" лет",state.age>=r.age],
+["Образование",educationNames[state.education]||"Уровень "+state.education, state.education>=r.education],
+["Навыки",state.skills+" / "+r.skills,state.skills>=r.skills],
+["Репутация",state.reputation+" / "+r.reputation,state.reputation>=r.reputation]
+];
+return rows.map(x=>`<div class="requirement">
+<span class="requirement-name">${x[0]}</span>
+<span class="requirement-status ${x[2]?"ok":"no"}">${x[1]} ${x[2]?"✓":"✕"}</span>
+</div>`).join("");
+}
+function requirementsMarkup(name){
+const r=professionRequirements(name);
+const passed=state.age>=r.age&&state.education>=r.education&&state.skills>=r.skills&&state.reputation>=r.reputation;
+return`<div class="card" style="margin-top:12px">
+<div class="row"><b>Требования: ${esc(name)}</b><span class="tag ${passed?"green":"red"}">${passed?"Выполнены":"Не выполнены"}</span></div>
+${requirementRows(name)}
+<div class="item-desc" style="margin-top:10px">Минимальное образование: <b>${educationNames[r.education]}</b>.</div>
+</div>`;
+}
+function showProfessionRequirements(name){
+if(!categories[state.ambition]?.includes(name))return;
+const r=professionRequirements(name);
+const passed=state.age>=r.age&&state.education>=r.education&&state.skills>=r.skills&&state.reputation>=r.reputation;
+app.innerHTML=`<div class="section-title">Требования профессии</div>
+<div class="card">
+<div style="font-size:25px;margin-bottom:8px">💼</div>
+<h3>${esc(name)}</h3>
+<span class="tag ${passed?"green":"red"}">${passed?"Все требования выполнены":"Есть невыполненные требования"}</span>
+${requirementRows(name)}
+<div class="notice" style="margin-top:14px">Для подачи заявки нужно выполнить все четыре условия. Если чего-то не хватает, продолжай учиться, развивать навыки и репутацию.</div>
+<button class="primary full" onclick="chooseCareerByName('${name}')">Выбрать эту профессию</button>
+<button class="ghost full" style="margin-top:8px" onclick="render()">Назад к профессиям</button>
+</div>`;
+}
+function chooseCareerByName(name){
+const i=categories[state.ambition]?.indexOf(name);
+if(i>=0)chooseCareer(i)
+}
+
+/* Рабочие задания */
+function getProfessionCategory(name){
+return Object.keys(categories).find(c=>categories[c].includes(name))||"Общество";
+}
+function getTasksForProfession(name){
+const category=getProfessionCategory(name);
+const templates=taskTemplates[category]||taskTemplates["Общество"];
+const special=taskSpecific[name];
+return templates.map((t,i)=>({
+title:special?.[i]||t.title,
+description:t.description,
+difficulty:t.difficulty+i*3
+}));
+}
+function jobTasksScreen(){
+const name=state.career;
+if(!importantProfessions.includes(name))return"";
+const done=state.jobTaskYear===state.year;
+const tasks=getTasksForProfession(name);
+const monthly=careerLevels[state.careerLevel].salary;
+return`<div class="card" style="border-color:#31517c">
+<div class="row"><h3 style="margin:0">⭐ Рабочие задания</h3><span class="tag gold">Особая работа</span></div>
+<p class="item-desc">В твоей профессии доступны дополнительные ответственные задачи. За их выполнение можно получить премию, опыт и репутацию.</p>
+${done?`<div class="notice">В этом году ты уже выполнил рабочее задание. Новые задания появятся после перехода к следующему году.</div>`:
+tasks.map((t,i)=>{
+const reward=Math.round(monthly*(.55+i*.2)*(1+state.careerLevel*.08));
+const skillNeed=Math.max(15,t.difficulty+state.careerLevel*2);
+const experienceNeed=Math.max(0,Math.floor(t.difficulty/12)-1);
+return`<div class="job-task">
+<h4>${esc(t.title)}</h4>
+<p>${esc(t.description)}</p>
+<div class="row"><span class="small muted">Сложность</span><b>${t.difficulty}/100</b></div>
+<div class="row" style="margin-top:6px"><span class="small muted">Навыки</span><b>${skillNeed}</b></div>
+<div class="row" style="margin-top:6px"><span class="small muted">Опыт</span><b>${experienceNeed} лет</b></div>
+<div class="row" style="margin-top:6px"><span class="small muted">Премия</span><b style="color:var(--green)">${money(reward)}</b></div>
+<button class="secondary full" style="margin-top:10px" onclick="completeJobTask(${i})">Выполнить задание</button>
+</div>`
+}).join("")}
+<div class="small muted">Задание расходует одно действие из пяти доступных за год.</div>
+</div>`;
+}
+function completeJobTask(index){
+if(!state.career||!importantProfessions.includes(state.career))return;
+if(state.jobTaskYear===state.year){notify("В этом году ты уже выполнял рабочее задание.","Задание выполнено","⭐");return}
+const tasks=getTasksForProfession(state.career);
+const task=tasks[index];if(!task)return;
+if(state.actionsThisYear>=5){notify("На этот год действий больше не осталось.","Лимит исчерпан","⏳");return}
+const skillNeed=Math.max(15,task.difficulty+state.careerLevel*2);
+const experienceNeed=Math.max(0,Math.floor(task.difficulty/12)-1);
+if(state.skills<skillNeed){notify("Для задания нужно "+skillNeed+" навыков. Сейчас у тебя "+state.skills+".","Не хватает навыков","⚡");return}
+if(state.careerYears<experienceNeed){notify("Для задания требуется "+experienceNeed+" лет опыта работы.","Не хватает опыта","💼");return}
+if(!spendAction())return;
+state.jobTaskYear=state.year;
+const monthly=careerLevels[state.careerLevel].salary;
+const reward=Math.round(monthly*(.55+index*.2)*(1+state.careerLevel*.08));
+const chance=clamp(65+(state.skills-skillNeed)*.5+state.careerLevel*3+state.reputation*.15-task.difficulty*.25,20,97);
+if(Math.random()*100<chance){
+state.money+=reward;
+state.skills=clamp(state.skills+2);
+state.reputation=clamp(state.reputation+3);
+state.influence=clamp(state.influence+1);
+state.jobTaskDone++;
+log("Ты успешно выполнил рабочее задание «"+task.title+"» и получил премию "+money(reward)+".");
+save();render();notify("Задание выполнено! Премия: "+money(reward)+". Навыки и репутация выросли.","Отличная работа","🏆")
+}else{
+state.reputation=clamp(state.reputation-1);
+state.skills=clamp(state.skills+1);
+log("Ты не справился с заданием «"+task.title+"». Получен полезный опыт, но результат оказался недостаточным.");
+save();render();notify("Задание не удалось выполнить полностью. Ты получил опыт, но премия не начислена.","Задание не выполнено","⚠️")
+}
 }
 
 /* БИЗНЕС */
@@ -409,7 +716,6 @@ return`<div class="section-title">Собственный бизнес</div>
 </div>
 <div class="notice">Когда тебе исполнится 18 лет, здесь появится возможность открыть собственную компанию.</div>`
 }
-
 if(!state.business){
 return`<div class="section-title">Открытие бизнеса</div>
 <div class="business-hero"><div style="font-size:32px">🏢</div>
@@ -429,7 +735,6 @@ ${businessTypes.map((b,i)=>`
 <button class="primary full" style="margin-top:12px" onclick="openBusiness(${i})" ${state.money<b.cost?"disabled":""}>Открыть бизнес</button>
 </div>`).join("")}`
 }
-
 const b=state.business;
 const type=businessTypes.find(x=>x.id===b.type);
 const levelNames=["Начинающий бизнес","Малое предприятие","Развивающаяся компания","Средний бизнес","Крупная компания","Корпорация"];
@@ -444,7 +749,6 @@ return`
 <div class="profit">${b.lastProfit>=0?"+":"−"}${money(Math.abs(b.lastProfit))}</div>
 <div class="row"><span class="small" style="color:#b8d7ce">Стоимость компании</span><b>${money(b.value)}</b></div>
 </div>
-
 <div class="grid">
 ${statCard("Баланс компании",money(b.cash))}
 ${statCard("Уровень",b.level+1+"/6")}
@@ -453,7 +757,6 @@ ${statCard("Репутация",b.reputation+"/100")}
 ${statCard("Состояние",b.health+"/100")}
 ${statCard("Риск",b.risk+"/100")}
 </div>
-
 <div class="card" style="margin-top:14px">
 <h3>Показатели компании</h3>
 <div class="item"><div class="row"><span class="small muted">Репутация</span><b>${b.reputation}/100</b></div>${bar(b.reputation)}</div>
@@ -461,40 +764,30 @@ ${statCard("Риск",b.risk+"/100")}
 <div class="item"><div class="row"><span class="small muted">Реклама</span><b>${b.marketing}/100</b></div>${bar(b.marketing)}</div>
 <div class="item"><div class="row"><span class="small muted">Развитие</span><b>${b.level+1}/6</b></div>${bar(b.level+1,6)}</div>
 </div>
-
 <div class="card">
 <h3>Управление компанией</h3>
 <div class="notice">Каждое управленческое действие занимает одно действие текущего года. Для развития также потребуются деньги.</div>
-
 <div class="business-action">
-<b>🏗️ Развить компанию</b>
-<p>Улучшить оборудование, помещение и рабочие процессы. Повысит потенциальную прибыль и стоимость бизнеса.</p>
+<b>🏗️ Развить компанию</b><p>Улучшить оборудование, помещение и рабочие процессы. Повысит потенциальную прибыль и стоимость бизнеса.</p>
 <div class="row"><span class="small muted">Стоимость</span><b>${money(businessUpgradeCost())}</b></div>
 <button class="secondary full" style="margin-top:10px" onclick="upgradeBusiness()">Улучшить компанию</button>
 </div>
-
 <div class="business-action">
-<b>📢 Запустить рекламу</b>
-<p>Привлечь новых клиентов и повысить узнаваемость компании.</p>
+<b>📢 Запустить рекламу</b><p>Привлечь новых клиентов и повысить узнаваемость компании.</p>
 <div class="row"><span class="small muted">Стоимость</span><b>15 000 ₽</b></div>
 <button class="secondary full" style="margin-top:10px" onclick="advertiseBusiness()">Запустить рекламу</button>
 </div>
-
 <div class="business-action">
-<b>👥 Нанять сотрудника</b>
-<p>Расширить команду. Сотрудники повышают доход, но увеличивают ежегодные расходы.</p>
+<b>👥 Нанять сотрудника</b><p>Расширить команду. Сотрудники повышают доход, но увеличивают ежегодные расходы.</p>
 <div class="row"><span class="small muted">Стоимость найма</span><b>12 000 ₽</b></div>
 <button class="secondary full" style="margin-top:10px" onclick="hireEmployee()">Нанять сотрудника</button>
 </div>
-
 <div class="business-action">
-<b>🤝 Найти контракт</b>
-<p>Попробовать получить дополнительный заказ. Успех зависит от репутации, навыков и связей.</p>
+<b>🤝 Найти контракт</b><p>Попробовать получить дополнительный заказ. Успех зависит от репутации, навыков и связей.</p>
 <div class="row"><span class="small muted">Стоимость участия</span><b>5 000 ₽</b></div>
 <button class="secondary full" style="margin-top:10px" onclick="businessContract()">Подать заявку на контракт</button>
 </div>
 </div>
-
 <div class="card">
 <h3>Финансы</h3>
 <div class="item"><div class="row"><span class="muted small">Вложено при открытии</span><b>${money(b.invested)}</b></div></div>
@@ -503,15 +796,13 @@ ${statCard("Риск",b.risk+"/100")}
 <div class="item"><div class="row"><span class="muted small">Чистый результат</span><b style="color:${b.lastProfit>=0?"var(--green)":"var(--red)"}">${b.lastProfit>=0?"+":"−"}${money(Math.abs(b.lastProfit))}</b></div></div>
 <div class="item"><div class="row"><span class="muted small">Дополнительные заказы</span><b>${money(b.pendingBonus)}</b></div></div>
 </div>
-
 <div class="card">
 <h3>Операции с компанией</h3>
 <button class="secondary full" onclick="investBusiness()">Вложить личные деньги в бизнес</button>
 <button class="ghost full" style="margin-top:9px" onclick="withdrawBusiness()">Вывести деньги из бизнеса</button>
 <button class="danger full" style="margin-top:9px" onclick="sellBusiness()">Продать компанию</button>
 <button class="ghost full" style="margin-top:9px" onclick="closeBusiness()">Закрыть бизнес</button>
-</div>
-`
+</div>`
 }
 
 /* Личная жизнь */
@@ -540,7 +831,7 @@ if(!categories[value])return;
 state.ambition=value;state.goal="Развиваться в сфере: "+value;
 log("Ты выбрал направление: "+value+".");save();render()
 }
-function clearAmbition(){state.ambition="";state.goal="";state.pendingApplication=false;save();render()}
+function clearAmbition(){state.ambition="";state.goal="";state.pendingApplication=false;state.selectedProfession="";save();render()}
 function spendAction(){
 if(state.actionsThisYear>=5){notify("На этот год действий больше не осталось.","Лимит исчерпан","⏳");return false}
 state.actionsThisYear++;return true
@@ -596,35 +887,31 @@ const professionForms={
 function professionInInstrumental(name){return professionForms[name]||name+"ом"}
 function chooseCareer(i){
 const p=categories[state.ambition]?.[i];if(!p)return;
+chooseCareerByName(p)
+}
+function chooseCareerByName(p){
 if(state.career){notify("Сначала заверши текущую карьеру или уволись.","У тебя уже есть работа","💼");return}
+if(!categories[state.ambition]?.includes(p))return;
+state.selectedProfession=p;
 state.goal="Стать "+professionInInstrumental(p).toLowerCase();
 state.pendingApplication=true;
-log("Ты поставил перед собой цель: "+state.goal+". Теперь нужно подготовиться и получить первую возможность.");
+log("Ты поставил перед собой цель: "+state.goal+". Теперь нужно подготовиться и получить первую должность.");
 save();render();
 if(state.age<18)notify("Сейчас можно готовиться к будущей профессии. С 18 лет сможешь подать заявку.","Пока рано работать","🎓");
-else notify("Цель установлена. Теперь нужно подготовиться и подать заявку.","Новая цель","🎯")
-}
-function requirements(){
-const p=state.goal.toLowerCase();
-let education=0,skills=10,age=18;
-if(/врач|хирург|кардиолог|невролог|педиатр|стоматолог|ветеринар|психолог|фармацевт/.test(p)){education=3;skills=35;age=22}
-else if(/судья|адвокат|дипломат|инженер|архитектор|пилот|преподаватель университета/.test(p)){education=2;skills=25;age=21}
-else if(/директор|губернатор|министр|ректор|топ-руководитель|мэр/.test(p)){education=3;skills=50;age=25}
-else if(/программист|разработчик|аналитик|учитель|журналист/.test(p)){education=1;skills=20;age=18}
-return{education,skills,age}
+else notify("Цель установлена. Изучи требования и подай заявку, когда будешь готов.","Новая цель","🎯")
 }
 function applyForJob(){
-if(!state.pendingApplication||!state.goal){notify("Сначала выбери цель.","Нет цели","⚠️");return}
+if(!state.pendingApplication||!state.selectedProfession){notify("Сначала выбери профессию.","Нет цели","⚠️");return}
 if(state.age<18){notify("Полноценная карьера начинается с 18 лет.","Пока рано","🎓");return}
-const r=requirements();
+const r=professionRequirements(state.selectedProfession);
 if(state.age<r.age){notify("Для этой профессии нужен возраст от "+r.age+" лет.","Пока рано","🎓");return}
-if(state.education<r.education){notify("Недостаточно образования. Требуемый уровень: "+r.education+".","Нужно образование","📚");return}
-if(state.skills<r.skills){notify("Нужно больше навыков. Сейчас: "+state.skills+", требуется: "+r.skills+".","Нужно развиваться","⚡");return}
-if(state.reputation<3){notify("Сначала нужно заработать хорошую репутацию.","Нужна репутация","⭐");return}
+if(state.education<r.education){notify("Недостаточно образования. Требуется: "+educationNames[r.education]+".","Нужно образование","📚");return}
+if(state.skills<r.skills){notify("Нужно больше навыков. Требуется: "+r.skills+". Сейчас: "+state.skills+".","Нужно развиваться","⚡");return}
+if(state.reputation<r.reputation){notify("Для этой профессии нужна репутация "+r.reputation+". Сейчас: "+state.reputation+".","Нужна репутация","⭐");return}
 state.jobApplications++;
 const chance=clamp(45+state.reputation/2+state.connections/5+state.influence/8,20,90);
 if(Math.random()*100<chance){
-state.career=state.goal.replace("Стать ","");state.careerLevel=0;state.careerYears=0;state.employed=true;state.pendingApplication=false;
+state.career=state.selectedProfession;state.careerLevel=0;state.careerYears=0;state.employed=true;state.pendingApplication=false;
 log("Тебя приняли на первую должность: "+state.career+".");
 notify("Заявка одобрена! Ты получил первую должность.","Тебя приняли","🎉")
 }else{
@@ -650,7 +937,8 @@ function quitJob(){
 if(!state.career||!state.employed)return;
 if(!confirm("Уволиться с текущей работы?"))return;
 log("Ты ушёл с должности: "+state.career+".");
-state.career=null;state.careerLevel=0;state.careerYears=0;state.employed=false;save();render()
+state.career=null;state.careerLevel=0;state.careerYears=0;state.employed=false;
+state.selectedProfession="";state.pendingApplication=false;save();render()
 }
 
 /* БИЗНЕС — операции */
@@ -889,8 +1177,6 @@ state.money+=salary;
 log("Ты получил годовой доход от работы: "+money(salary)+".");
 if(Math.random()<.08){state.reputation=clamp(state.reputation+2);state.influence=clamp(state.influence+1);log("Твои результаты заметили. Репутация немного выросла.")}
 }
-
-/* Расчёт бизнеса */
 const businessBefore=state.business?{...state.business}:null;
 if(state.business)calculateBusinessYear();
 
@@ -982,6 +1268,7 @@ pendingBonus:0,years:0,totalProfit:0,level:0
 };
 state.business={...defaults,...state.business}
 }
+if(state.career&&!state.selectedProfession)state.selectedProfession=state.career;
 save();nav.classList.remove("hidden");render()
 }else{
 createScreen()
