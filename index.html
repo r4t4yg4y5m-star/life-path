@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b10">
+<title>LIFE PATH</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090b10;color:#f1f4f8;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+.app{max-width:680px;margin:auto;padding:22px 17px 45px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.logo{font-size:20px;font-weight:850;letter-spacing:3px}
+.logo span{color:#9bbce8}
+.version{font-size:10px;color:#8994a5;border:1px solid #303744;padding:6px 9px;border-radius:20px}
+.card{
+ background:#121720;border:1px solid #252e3b;
+ border-radius:17px;padding:19px;margin-bottom:14px;
+}
+.hero{background:linear-gradient(145deg,#1b293c,#111720);padding:25px 21px}
+.eyebrow{font-size:10px;letter-spacing:2px;color:#9bbce8;font-weight:800}
+h1{font-size:35px;line-height:1.08;letter-spacing:-1.5px;margin:13px 0}
+h2{font-size:17px;margin:0 0 15px}
+p{line-height:1.55}
+.muted{color:#8994a5}
+.small{font-size:12px}
+input{
+ width:100%;padding:15px;margin:10px 0 15px;
+ background:#0b1018;border:1px solid #303744;
+ border-radius:11px;color:white;font-size:16px;
+}
+button{
+ width:100%;padding:15px;border:0;border-radius:12px;
+ background:#e5edf8;color:#101722;font-weight:750;
+ font-size:14px;margin-top:9px;cursor:pointer;
+}
+button.secondary{background:#202936;color:#edf2fa;border:1px solid #303b4b}
+button.choice{
+ background:#192333;color:#f1f4f8;
+ border:1px solid #354359;text-align:left;
+ line-height:1.4;font-weight:650;
+}
+button:disabled{opacity:.35}
+.hidden{display:none!important}
+.big-age{font-size:54px;font-weight:850;letter-spacing:-3px;margin:5px 0}
+.stage{font-size:13px;color:#a9c9f3}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.stat{background:#1a222e;border:1px solid #293341;border-radius:12px;padding:13px}
+.stat-name{font-size:11px;color:#8994a5}
+.stat-value{font-size:20px;font-weight:750;margin-top:6px}
+.money{color:#91dcb1}
+.event{background:linear-gradient(145deg,#182638,#121720);border-color:#34465f}
+.event-title{font-size:23px;font-weight:800;margin:10px 0}
+.event-description{font-size:14px;color:#b3bfce;line-height:1.6}
+.event-tag{font-size:10px;letter-spacing:1.5px;color:#a9c9f3}
+.history{max-height:320px;overflow:auto}
+.history-item{padding:12px 0;border-bottom:1px solid #293341;font-size:13px;line-height:1.5}
+.history-item:last-child{border:0}
+.history-age{color:#a9c9f3;font-weight:750}
+.footer{text-align:center;color:#626e7e;font-size:10px;margin-top:25px}
+.info{font-size:12px;color:#8994a5;line-height:1.5}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+ <div class="logo">LIFE <span>PATH</span></div>
+ <div class="version">PROTOTYPE 0.1</div>
+</header>
+
+<section id="startScreen">
+ <div class="card hero">
+  <div class="eyebrow">YOUR LIFE. YOUR CHOICES.</div>
+  <h1>Одна жизнь.<br>Ты выбираешь путь.</h1>
+  <p class="muted">Начни с рождения. Взрослей, принимай решения, строй карьеру и создавай собственную историю.</p>
+ </div>
+
+ <div class="card">
+  <div class="eyebrow">НОВАЯ ИСТОРИЯ</div>
+  <h2 style="margin-top:12px">Создание персонажа</h2>
+  <label class="small muted" for="nameInput">Имя персонажа</label>
+  <input id="nameInput" maxlength="20" placeholder="Например, Алекс">
+  <button onclick="createCharacter()">Начать жизнь →</button>
+  <p class="info">Каждая жизнь начинается с рождения. У каждого персонажа будут свои условия и возможности.</p>
+ </div>
+</section>
+
+<section id="gameScreen" class="hidden">
+
+ <div class="card hero">
+  <div class="eyebrow">ТВОЯ ЖИЗНЬ</div>
+  <div class="big-age" id="age">0 лет</div>
+  <div class="stage" id="stage">Детство</div>
+  <p class="muted small" id="characterName"></p>
+  <p class="muted small" id="background"></p>
+ </div>
+
+ <div class="card">
+  <h2>Характеристики</h2>
+  <div class="stats">
+   <div class="stat">
+    <div class="stat-name">Деньги</div>
+    <div class="stat-value money" id="money">0 ₽</div>
+   </div>
+   <div class="stat">
+    <div class="stat-name">Образование</div>
+    <div class="stat-value" id="education">0</div>
+   </div>
+   <div class="stat">
+    <div class="stat-name">Навыки</div>
+    <div class="stat-value" id="skills">0</div>
+   </div>
+   <div class="stat">
+    <div class="stat-name">Репутация</div>
+    <div class="stat-value" id="reputation">0</div>
+   </div>
+   <div class="stat">
+    <div class="stat-name">Здоровье</div>
+    <div class="stat-value" id="health">100</div>
+   </div>
+   <div class="stat">
+    <div class="stat-name">Отношения</div>
+    <div class="stat-value" id="relations">50</div>
+   </div>
+  </div>
+ </div>
+
+ <div class="card event hidden" id="eventCard">
+  <div class="event-tag" id="eventTag">СОБЫТИЕ</div>
+  <div class="event-title" id="eventTitle"></div>
+  <div class="event-description" id="eventDescription"></div>
+  <div id="choices"></div>
+ </div>
+
+ <button id="nextButton" onclick="nextYear()">Продолжить год →</button>
+
+ <div class="card">
+  <h2>История жизни</h2>
+  <div class="history" id="history">
+   <div class="muted small">Твоя история только начинается.</div>
+  </div>
+ </div>
+
+ <button class="secondary" onclick="newLife()">Начать новую жизнь</button>
+
+</section>
+
+<div class="footer">LIFE PATH · EVERY CHOICE MATTERS</div>
+</div>
+
+<script>
+const SAVE_KEY = "lifePath_v01";
+
+let player = null;
+
+const backgrounds = [
+ "Ты родился в семье со средним достатком.",
+ "Ты родился в обеспеченной семье.",
+ "Твоя семья живёт скромно, но старается дать тебе всё необходимое.",
+ "Ты родился в небольшом городе.",
+ "Ты родился в большом городе."
+];
+
+const events = [
+
+{
+ min:0,max:0,
+ title:"Начало истории",
+ description:"Ты появился на свет. Твоя жизнь начинается. Каким будет твоё детство?",
+ choices:[
+  {text:"Расти в спокойной семейной обстановке",relations:5,health:3},
+  {text:"Расти в активной и общительной семье",relations:8,skills:2},
+  {text:"С детства привыкать к самостоятельности",skills:5}
+ ]
+},
+
+{
+ min:1,max:6,
+ title:"Первые увлечения",
+ description:"Ты постепенно познаёшь окружающий мир. Чем тебе интереснее заниматься?",
+ choices:[
+  {text:"Играть и исследовать мир",skills:3,health:2},
+  {text:"Рисовать и придумывать истории",skills:4,education:1},
+  {text:"Проводить время с близкими",relations:5}
+ ]
+},
+
+{
+ min:7,max:13,
+ title:"Школьные годы",
+ description:"Ты пошёл в школу. Как будешь проводить свободное время?",
+ choices:[
+  {text:"Уделять больше времени учёбе",education:5,skills:1},
+  {text:"Заниматься спортом и хобби",health:3,skills:3},
+  {text:"Знакомиться и общаться",relations:5,reputation:1}
+ ]
+},
+
+{
+ min:14,max:17,
+ title:"Первые серьёзные решения",
+ description:"Ты взрослеешь. Появляется возможность выбрать направление, которое будет интересно развивать.",
+ choices:[
+  {text:"Сосредоточиться на учёбе",education:5,skills:2},
+  {text:"Осваивать практические навыки",skills:6},
+  {text:"Развивать общение и знакомства",relations:4,reputation:3}
+ ]
+},
+
+{
+ min:18,max:24,
+ title:"Начало взрослой жизни",
+ description:"Школа позади. Перед тобой открывается несколько путей. Что выберешь?",
+ choices:[
+  {text:"Поступить в университет",education:8,money:-3000,skills:2},
+  {text:"Устроиться на работу",money:8000,skills:3},
+  {text:"Попробовать открыть своё дело",money:-2000,skills:5,reputation:2}
+ ]
+},
+
+{
+ min:25,max:39,
+ title:"Новые возможности",
+ description:"Ты уже многое попробовал. Появляется шанс изменить своё положение.",
+ choices:[
+  {text:"Развивать карьеру",money:12000,skills:4,reputation:3},
+  {text:"Получить дополнительное образование",education:5,skills:4,money:-3000},
+  {text:"Уделить больше внимания близким",relations:7,health:2}
+ ]
+},
+
+{
+ min:40,max:59,
+ title:"Проверка временем",
+ description:"За плечами большой жизненный опыт. Какой приоритет ты выберешь сейчас?",
+ choices:[
+  {text:"Продолжить развивать карьеру",money:15000,reputation:5},
+  {text:"Начать новый проект",skills:5,money:-5000},
+  {text:"Больше времени уделять себе и семье",health:5,relations:5}
+ ]
+},
+
+{
+ min:60,max:100,
+ title:"Новый этап",
+ description:"Ты прошёл большой жизненный путь. Что для тебя сейчас важнее всего?",
+ choices:[
+  {text:"Передавать свой опыт другим",reputation:5,relations:5},
+  {text:"Заниматься любимым делом",health:3,skills:3},
+  {text:"Проводить время с близкими",relations:8,health:2}
+ ]
+}
+
+];
+
+function createCharacter(){
+ const name=document.getElementById("nameInput").value.trim();
+
+ if(!name){
+  alert("Сначала введи имя персонажа.");
+  return;
+ }
+
+ player={
+  name:name,
+  age:0,
+  money:0,
+  education:0,
+  skills:0,
+  reputation:0,
+  health:100,
+  relations:50,
+  background:backgrounds[Math.floor(Math.random()*backgrounds.length)],
+  history:[],
+  eventDone:false,
+  finished:false
+ };
+
+ player.history.push({
+  age:0,
+  text:"Ты появился на свет. Началась твоя история."
+ });
+
+ document.getElementById("startScreen").classList.add("hidden");
+ document.getElementById("gameScreen").classList.remove("hidden");
+
+ save();
+ render();
+ showEvent();
+}
+
+function getStage(age){
+ if(age<=6)return "Раннее детство";
+ if(age<=13)return "Школьные годы";
+ if(age<=17)return "Подростковый возраст";
+ if(age<=24)return "Начало взрослой жизни";
+ if(age<=39)return "Развитие и карьера";
+ if(age<=59)return "Зрелость";
+ if(age<=100)return "Поздние годы";
+ return "Конец истории";
+}
+
+function getEvent(){
+ return events.find(e=>player.age>=e.min&&player.age<=e.max);
+}
+
+function showEvent(){
+ const event=getEvent();
+
+ if(!event)return;
+
+ document.getElementById("eventCard").classList.remove("hidden");
+ document.getElementById("eventTag").textContent=
+  "СОБЫТИЕ · "+player.age+" ЛЕТ";
+ document.getElementById("eventTitle").textContent=event.title;
+ document.getElementById("eventDescription").textContent=event.description;
+
+ const box=document.getElementById("choices");
+ box.innerHTML="";
+
+ event.choices.forEach(choice=>{
+  const button=document.createElement("button");
+  button.className="choice";
+  button.textContent=choice.text;
+  button.onclick=()=>choose(choice);
+  box.appendChild(button);
+ });
+
+ document.getElementById("nextButton").disabled=true;
+}
+
+function choose(choice){
+ if(player.eventDone)return;
+
+ const changes=[];
+
+ Object.keys(choice).forEach(key=>{
+  if(key==="text")return;
+
+  if(typeof player[key]==="number"){
+   player[key]+=choice[key];
+   changes.push(key);
+  }
+ });
+
+ ["education","skills","reputation","health","relations"].forEach(key=>{
+  player[key]=Math.max(0,Math.min(100,player[key]));
+ });
+
+ player.money=Math.max(0,player.money);
+
+ player.history.push({
+  age:player.age,
+  text:choice.text
+ });
+
+ player.eventDone=true;
+
+ document.getElementById("eventCard").classList.add("hidden");
+
+ save();
+ render();
+}
+
+function nextYear(){
+ if(!player||!player.eventDone||player.finished)return;
+
+ if(player.age>=100){
+  finishLife();
+  return;
+ }
+
+ player.age++;
+
+ player.eventDone=false;
+
+ if(player.age===18){
+  player.history.push({
+   age:18,
+   text:"Тебе исполнилось 18 лет. Началась взрослая жизнь."
+  });
+ }
+
+ if(player.age===100){
+  player.history.push({
+   age:100,
+   text:"Тебе исполнилось 100 лет. Твоя история подходит к концу."
+  });
+ }
+
+ showEvent();
+ save();
+ render();
+}
+
+function finishLife(){
+ player.finished=true;
+ player.eventDone=true;
+
+ document.getElementById("eventCard").classList.add("hidden");
+ document.getElementById("nextButton").disabled=true;
+
+ player.history.push({
+  age:player.age,
+  text:"История завершена. Ты прожил целую жизнь в LIFE PATH."
+ });
+
+ save();
+ render();
+
+ alert("Твоя история завершена!");
+}
+
+function render(){
+ if(!player)return;
+
+ document.getElementById("age").textContent=player.age+" лет";
+ document.getElementById("stage").textContent=getStage(player.age);
+ document.getElementById("characterName").textContent="Персонаж: "+player.name;
+ document.getElementById("background").textContent=player.background;
+
+ document.getElementById("money").textContent=
+  player.money.toLocaleString("ru-RU")+" ₽";
+
+ ["education","skills","reputation","health","relations"].forEach(key=>{
+  document.getElementById(key).textContent=player[key];
+ });
+
+ const history=document.getElementById("history");
+ history.innerHTML="";
+
+ player.history.slice().reverse().forEach(item=>{
+  const div=document.createElement("div");
+  div.className="history-item";
+
+  const age=document.createElement("span");
+  age.className="history-age";
+  age.textContent=item.age+" лет — ";
+
+  const text=document.createElement("span");
+  text.textContent=item.text;
+
+  div.appendChild(age);
+  div.appendChild(text);
+  history.appendChild(div);
+ });
+
+ document.getElementById("nextButton").disabled=
+  !player.eventDone||player.finished;
+
+ if(player.finished){
+  document.getElementById("nextButton").textContent="История завершена";
+ }else{
+  document.getElementById("nextButton").textContent="Продолжить год →";
+ }
+}
+
+function save(){
+ localStorage.setItem(SAVE_KEY,JSON.stringify(player));
+}
+
+function newLife(){
+ if(!confirm("Начать новую жизнь? Старый прогресс будет удалён."))return;
+
+ localStorage.removeItem(SAVE_KEY);
+ location.reload();
+}
+
+function loadGame(){
+ const data=localStorage.getItem(SAVE_KEY);
+
+ if(!data)return;
+
+ try{
+  const loaded=JSON.parse(data);
+
+  if(!loaded||typeof loaded.name!=="string"||
+     typeof loaded.age!=="number"||
+     !Array.isArray(loaded.history))return;
+
+  player=loaded;
+
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+
+  render();
+
+  if(!player.eventDone&&!player.finished){
+   showEvent();
+  }
+
+ }catch(error){
+  console.log("Ошибка загрузки сохранения",error);
+ }
+}
+
+loadGame();
+</script>
+</body>
+</html>
