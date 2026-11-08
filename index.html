@@ -2,903 +2,538 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>LIFE PATH</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root {
-  --bg:#080d18; --panel:#111a2b; --panel2:#172238;
-  --blue:#3985ff; --text:#f2f5fb; --muted:#8996ad;
-  --green:#36c98b; --red:#f06470; --gold:#e8b85d;
-  --border:#26344c;
+:root{
+--bg:#080d18;--panel:#111a2b;--panel2:#19263d;
+--blue:#3985ff;--text:#f2f5fb;--muted:#8996ad;
+--border:#26344c;--green:#36c98b;--red:#f06470;--gold:#e8b85d
 }
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  padding:0 0 90px;
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:100px}
 button,input,select{font:inherit}
 button{cursor:pointer}
-header{
-  padding:22px 17px 15px;
-  background:linear-gradient(135deg,#101d34,#0b1221);
-  border-bottom:1px solid var(--border);
-}
+header{padding:22px 17px 15px;background:linear-gradient(135deg,#101d34,#0b1221);border-bottom:1px solid var(--border)}
 .logo{font-size:23px;font-weight:900;letter-spacing:2px}
 .logo span{color:var(--blue)}
 .subtitle{font-size:11px;color:var(--muted);margin-top:5px}
 .container{padding:15px;max-width:760px;margin:auto}
-.card{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:17px;padding:15px;margin-bottom:13px;
-}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:17px;padding:15px;margin-bottom:13px}
 .card h3{font-size:15px;margin:0 0 12px}
 .muted{color:var(--muted)}
 .small{font-size:12px}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
-.stat{
-  background:var(--panel2);padding:12px;border-radius:13px;
-  min-width:0;
-}
-.stat .value{font-size:20px;font-weight:800;margin-top:5px}
+.stat{background:var(--panel2);padding:12px;border-radius:13px}
+.stat .value{font-size:19px;font-weight:800;margin-top:5px}
 .stat .name{font-size:11px;color:var(--muted)}
-button.primary,button.secondary,button.danger,button.ghost{
-  border:0;border-radius:12px;padding:12px 14px;font-weight:700;
-}
+button.primary,button.secondary,button.danger,button.ghost{border:0;border-radius:12px;padding:12px 14px;font-weight:750}
 button.primary{background:var(--blue);color:white}
 button.secondary{background:#263650;color:white}
 button.danger{background:#512a37;color:#ffb8c0}
 button.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
 button:disabled{opacity:.4;cursor:not-allowed}
 .full{width:100%}
-input,select{
-  width:100%;background:#0b1424;border:1px solid var(--border);
-  color:var(--text);border-radius:11px;padding:12px;margin:6px 0 12px;
-  outline:none;
-}
+input,select{width:100%;background:#0b1424;border:1px solid var(--border);color:var(--text);border-radius:11px;padding:12px;margin:6px 0 12px;outline:none}
 label{font-size:12px;color:var(--muted)}
-.nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:5;
-  display:flex;justify-content:space-around;gap:4px;
-  padding:9px 5px calc(9px + env(safe-area-inset-bottom));
-  background:#0d1627;border-top:1px solid var(--border);
-}
-.nav button{
-  flex:1;background:transparent;border:0;color:var(--muted);
-  font-size:10px;padding:7px 2px;border-radius:10px;
-}
-.nav button.active{background:#1d3152;color:white}
-.nav button span{display:block;font-size:19px;margin-bottom:3px}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;justify-content:space-around;gap:4px;padding:9px 5px calc(9px + env(safe-area-inset-bottom));background:#0d1627;border-top:1px solid var(--border)}
+.nav button{flex:1;background:transparent;border:0;color:var(--muted);font-size:10px;padding:7px 2px;border-radius:12px;transition:background .2s,color .2s,transform .2s}
+.nav button.active{background:#1d3152;color:white;transform:translateY(-3px)}
+.nav .nav-icon{display:block;font-size:21px;margin-bottom:4px;transition:transform .25s}
+.nav button.active .nav-icon{transform:scale(1.15)}
 .section-title{font-size:19px;font-weight:850;margin:5px 0 14px}
-.progress{
-  height:7px;background:#26344c;border-radius:20px;overflow:hidden;margin-top:8px;
-}
-.progress div{height:100%;background:var(--blue);border-radius:20px}
-.tag{
-  display:inline-block;padding:5px 8px;border-radius:8px;
-  background:#213654;color:#a9cbff;font-size:10px;margin:2px;
-}
+.big-age{font-size:42px;font-weight:900}
+.progress{height:7px;background:#26344c;border-radius:20px;overflow:hidden;margin-top:8px}
+.progress div{height:100%;background:var(--blue);border-radius:20px;transition:width .3s}
+.tag{display:inline-block;padding:5px 8px;border-radius:8px;background:#213654;color:#a9cbff;font-size:10px;margin:2px}
 .tag.green{background:#173c35;color:#8ce5c1}
 .tag.red{background:#482832;color:#ffb2bb}
 .tag.gold{background:#46391f;color:#f4d18a}
-.item{
-  padding:13px 0;border-bottom:1px solid var(--border);
-}
+.item{padding:13px 0;border-bottom:1px solid var(--border)}
 .item:last-child{border:0}
 .item-title{font-weight:750;font-size:14px}
-.item-desc{font-size:12px;color:var(--muted);margin:5px 0 9px;line-height:1.45}
-.event{
-  border-left:3px solid var(--gold);padding:12px;
-  background:#1b2030;border-radius:0 12px 12px 0;margin:10px 0;
-}
+.item-desc{font-size:12px;color:var(--muted);margin:5px 0 9px;line-height:1.5}
+.event{border-left:3px solid var(--gold);padding:12px;background:#1b2030;border-radius:0 12px 12px 0;margin:10px 0}
 .event.bad{border-color:var(--red)}
 .event.good{border-color:var(--green)}
 .choice{display:flex;flex-direction:column;gap:7px;margin-top:10px}
 .choice button{text-align:left}
-.hidden{display:none!important}
+.notice{padding:11px;border-radius:11px;background:#17253c;color:#b9c9e3;font-size:12px;line-height:1.5;margin-bottom:12px}
 .center{text-align:center}
-.big-age{font-size:42px;font-weight:900}
-.notice{
-  padding:11px;border-radius:11px;background:#17253c;
-  color:#b9c9e3;font-size:12px;line-height:1.5;margin-bottom:12px;
-}
+.hidden{display:none!important}
 hr{border:0;border-top:1px solid var(--border);margin:13px 0}
+
+/* Анимация переходов */
+#app{animation:pageIn .3s ease both}
+@keyframes pageIn{
+from{opacity:0;transform:translateY(13px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* Анимированное уведомление */
+.toast-wrap{
+position:fixed;inset:0;z-index:20;display:flex;align-items:center;
+justify-content:center;padding:25px;background:rgba(0,0,0,.45);
+opacity:0;pointer-events:none;transition:opacity .25s
+}
+.toast-wrap.show{opacity:1;pointer-events:auto}
+.toast{
+width:100%;max-width:340px;background:#19263b;border:1px solid #354765;
+border-radius:19px;padding:22px;box-shadow:0 15px 50px #0008;
+transform:scale(.88) translateY(15px);transition:transform .3s cubic-bezier(.2,.8,.2,1)
+}
+.toast-wrap.show .toast{transform:scale(1) translateY(0)}
+.toast-icon{width:43px;height:43px;border-radius:14px;background:#233d65;display:grid;place-items:center;font-size:22px;margin-bottom:13px}
+.toast-title{font-size:16px;font-weight:850;margin-bottom:7px}
+.toast-message{font-size:14px;line-height:1.5;color:#b9c6da}
+.toast button{margin-top:18px}
 @media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo">LIFE <span>PATH</span></div>
-  <div class="subtitle">ТВОЯ ЖИЗНЬ. ТВОИ РЕШЕНИЯ. ТВОИ ПОСЛЕДСТВИЯ.</div>
+ <div class="logo">LIFE <span>PATH</span></div>
+ <div class="subtitle">ТВОЯ ЖИЗНЬ. ТВОИ РЕШЕНИЯ. ТВОИ ПОСЛЕДСТВИЯ.</div>
 </header>
 
 <div class="container" id="app"></div>
 
 <nav class="nav hidden" id="nav">
-  <button data-tab="home" class="active"><span>⌂</span>Главная</button>
-  <button data-tab="actions"><span>⚡</span>Действия</button>
-  <button data-tab="education"><span>🎓</span>Учёба</button>
-  <button data-tab="career"><span>💼</span>Карьера</button>
-  <button data-tab="life"><span>♡</span>Жизнь</button>
+ <button data-tab="home" class="active"><span class="nav-icon">🏠</span>Главная</button>
+ <button data-tab="actions"><span class="nav-icon">⚡</span>Действия</button>
+ <button data-tab="education"><span class="nav-icon">🎓</span>Учёба</button>
+ <button data-tab="career"><span class="nav-icon">💼</span>Карьера</button>
+ <button data-tab="life"><span class="nav-icon">❤️</span>Жизнь</button>
 </nav>
 
+<div class="toast-wrap" id="toastWrap" onclick="closeToast(event)">
+ <div class="toast" onclick="event.stopPropagation()">
+  <div class="toast-icon" id="toastIcon">ℹ️</div>
+  <div class="toast-title" id="toastTitle">Уведомление</div>
+  <div class="toast-message" id="toastMessage"></div>
+  <button class="primary full" onclick="hideToast()">Понятно</button>
+ </div>
+</div>
+
 <script>
-const tg = window.Telegram?.WebApp;
-if (tg) { tg.ready(); tg.expand(); }
+const tg=window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand()}
 
-const KEY = "lifePath_v01";
-const app = document.getElementById("app");
-const nav = document.getElementById("nav");
+const KEY="lifePath_v01";
+const app=document.getElementById("app");
+const nav=document.getElementById("nav");
 
-const categories = {
-  "Спорт": [
-    "Спортсмен","Футболист","Хоккеист","Баскетболист","Боксёр",
-    "Теннисист","Тренер","Фитнес-тренер","Спортивный менеджер",
-    "Спортивный врач","Судья","Спортивный аналитик"
-  ],
-  "Медицина": [
-    "Медбрат","Медсестра","Фельдшер","Врач-терапевт","Хирург",
-    "Кардиолог","Невролог","Педиатр","Стоматолог","Психолог",
-    "Фармацевт","Ветеринар","Реабилитолог","Лаборант"
-  ],
-  "Технологии": [
-    "Техподдержка","Тестировщик","Веб-разработчик","Программист",
-    "Мобильный разработчик","Системный администратор","Инженер",
-    "Специалист по кибербезопасности","Аналитик данных",
-    "Разработчик игр","Архитектор ПО","Технический директор"
-  ],
-  "Бизнес": [
-    "Продавец","Менеджер по продажам","Маркетолог","Бухгалтер",
-    "Предприниматель","Финансовый аналитик","Бизнес-аналитик",
-    "Руководитель отдела","Директор компании","Инвестор",
-    "Банковский специалист","Управляющий"
-  ],
-  "Творчество": [
-    "Фотограф","Дизайнер","Иллюстратор","Музыкант","Актёр",
-    "Режиссёр","Журналист","Писатель","Монтажёр","Продюсер",
-    "Архитектор","Художник","Видеограф","Сценарист"
-  ],
-  "Транспорт": [
-    "Курьер","Водитель","Автомеханик","Автоэлектрик","Механик",
-    "Пилот","Машинист","Логист","Диспетчер","Инженер транспорта",
-    "Капитан судна","Руководитель автопарка"
-  ],
-  "Наука": [
-    "Лаборант","Исследователь","Биолог","Химик","Физик",
-    "Астроном","Геолог","Эколог","Математик","Преподаватель вуза",
-    "Научный руководитель","Руководитель лаборатории"
-  ],
-  "Государство": [
-    "Госслужащий","Муниципальный служащий","Юрист",
-    "Адвокат","Судья","Дипломат","Депутат","Мэр",
-    "Губернатор","Министр","Руководитель ведомства",
-    "Политический аналитик"
-  ],
-  "Рабочие профессии": [
-    "Строитель","Электрик","Сварщик","Сантехник","Повар",
-    "Пекарь","Мастер по ремонту","Токарь","Слесарь",
-    "Прораб","Инженер-строитель","Начальник производства"
-  ],
-  "Образование": [
-    "Воспитатель","Учитель","Репетитор","Преподаватель колледжа",
-    "Преподаватель университета","Методист","Директор школы",
-    "Ректор"
-  ],
-  "Общество": [
-    "Социальный работник","Пожарный","Спасатель","Полицейский",
-    "Сотрудник МЧС","Сотрудник администрации","Дипломатический работник",
-    "Руководитель общественной организации"
-  ]
+const categories={
+"Спорт":["Спортсмен","Футболист","Хоккеист","Баскетболист","Боксёр","Теннисист","Тренер","Фитнес-тренер","Спортивный менеджер","Спортивный врач","Судья","Спортивный аналитик"],
+"Медицина":["Медбрат","Медсестра","Фельдшер","Врач-терапевт","Хирург","Кардиолог","Невролог","Педиатр","Стоматолог","Психолог","Фармацевт","Ветеринар","Реабилитолог","Лаборант"],
+"Технологии":["Техподдержка","Тестировщик","Веб-разработчик","Программист","Мобильный разработчик","Системный администратор","Инженер","Специалист по кибербезопасности","Аналитик данных","Разработчик игр","Архитектор ПО","Технический директор"],
+"Бизнес":["Продавец","Менеджер по продажам","Маркетолог","Бухгалтер","Предприниматель","Финансовый аналитик","Бизнес-аналитик","Руководитель отдела","Директор компании","Инвестор","Банковский специалист","Управляющий"],
+"Творчество":["Фотограф","Дизайнер","Иллюстратор","Музыкант","Актёр","Режиссёр","Журналист","Писатель","Монтажёр","Продюсер","Архитектор","Художник","Видеограф","Сценарист"],
+"Транспорт":["Курьер","Водитель","Автомеханик","Автоэлектрик","Механик","Пилот","Машинист","Логист","Диспетчер","Инженер транспорта","Капитан судна","Руководитель автопарка"],
+"Наука":["Лаборант","Исследователь","Биолог","Химик","Физик","Астроном","Геолог","Эколог","Математик","Преподаватель вуза","Научный руководитель","Руководитель лаборатории"],
+"Государство":["Госслужащий","Муниципальный служащий","Юрист","Адвокат","Судья","Дипломат","Депутат","Мэр","Губернатор","Министр","Руководитель ведомства","Политический аналитик"],
+"Рабочие профессии":["Строитель","Электрик","Сварщик","Сантехник","Повар","Пекарь","Мастер по ремонту","Токарь","Слесарь","Прораб","Инженер-строитель","Начальник производства"],
+"Образование":["Воспитатель","Учитель","Репетитор","Преподаватель колледжа","Преподаватель университета","Методист","Директор школы","Ректор"],
+"Общество":["Социальный работник","Пожарный","Спасатель","Полицейский","Сотрудник МЧС","Сотрудник администрации","Дипломатический работник","Руководитель общественной организации"]
 };
 
-const careerLevels = [
-  {name:"Начинающий", salary:18000, years:0},
-  {name:"Младший специалист", salary:35000, years:1},
-  {name:"Специалист", salary:55000, years:2},
-  {name:"Опытный специалист", salary:80000, years:4},
-  {name:"Старший специалист", salary:115000, years:6},
-  {name:"Руководитель группы", salary:155000, years:9},
-  {name:"Начальник отдела", salary:210000, years:12},
-  {name:"Заместитель директора", salary:280000, years:16},
-  {name:"Директор", salary:380000, years:20},
-  {name:"Топ-руководитель", salary:550000, years:25}
+const careerLevels=[
+{name:"Начинающий",salary:18000,years:0},
+{name:"Младший специалист",salary:35000,years:1},
+{name:"Специалист",salary:55000,years:2},
+{name:"Опытный специалист",salary:80000,years:4},
+{name:"Старший специалист",salary:115000,years:6},
+{name:"Руководитель группы",salary:155000,years:9},
+{name:"Начальник отдела",salary:210000,years:12},
+{name:"Заместитель директора",salary:280000,years:16},
+{name:"Директор",salary:380000,years:20},
+{name:"Топ-руководитель",salary:550000,years:25}
 ];
 
-const events = [
-  {
-    title:"Сложный период в семье",
-    text:"В семье возникли финансовые трудности. Атмосфера дома стала напряжённой.",
-    options:[
-      ["Помочь семье",s=>{s.money-=12000;s.relations+=5;s.familySupport+=3;}],
-      ["Сосредоточиться на себе",s=>{s.relations-=3;s.health-=2;}]
-    ]
-  },
-  {
-    title:"Нечестное предложение",
-    text:"Знакомый предлагает сомнительную сделку. Обещает быстрые деньги, но последствия могут быть серьёзными.",
-    options:[
-      ["Отказаться",s=>{s.reputation+=2;s.influence+=1;}],
-      ["Связаться с сомнительной компанией",s=>{s.money+=5000;s.reputation-=8;s.risk+=10;}]
-    ]
-  },
-  {
-    title:"Потеря работы",
-    text:"Компания сокращает расходы. Твою должность убрали.",
-    options:[
-      ["Искать новую работу",s=>{s.employed=false;s.reputation-=2;}],
-      ["Временно подрабатывать",s=>{s.money+=8000;s.skills+=1;s.employed=false;}]
-    ]
-  },
-  {
-    title:"Полезное знакомство",
-    text:"Ты познакомился с человеком, который может помочь в будущем.",
-    options:[
-      ["Поддерживать общение",s=>{s.connections+=5;s.relations+=2;}],
-      ["Не придавать значения",s=>{s.relations-=1;}]
-    ]
-  },
-  {
-    title:"Неожиданные расходы",
-    text:"Появились незапланированные расходы. Придётся пересмотреть бюджет.",
-    options:[
-      ["Оплатить расходы",s=>{s.money-=10000;s.health+=1;}],
-      ["Отложить решение",s=>{s.relations-=2;s.reputation-=1;}]
-    ]
-  },
-  {
-    title:"Возможность проявить себя",
-    text:"На работе или учёбе появился сложный проект. Он потребует много сил.",
-    options:[
-      ["Взяться за проект",s=>{s.skills+=4;s.reputation+=4;s.health-=3;}],
-      ["Отказаться",s=>{s.reputation-=1;}]
-    ]
-  },
-  {
-    title:"Предательство знакомого",
-    text:"Человек, которому ты доверял, подвёл тебя. Это повлияло на отношения и планы.",
-    options:[
-      ["Поговорить и выяснить всё",s=>{s.relations-=2;s.reputation+=1;}],
-      ["Прекратить общение",s=>{s.relations-=4;s.health+=1;}]
-    ]
-  },
-  {
-    title:"Проблемы с бизнесом",
-    text:"Если у тебя есть своё дело, оно столкнулось с трудностями. Доходы снизились.",
-    options:[
-      ["Попробовать восстановить дело",s=>{s.money-=15000;s.skills+=2;}],
-      ["Сократить расходы",s=>{s.money-=3000;s.reputation-=1;}]
-    ]
-  },
-  {
-    title:"Несправедливость",
-    text:"Ты столкнулся с несправедливым отношением. Можно попытаться отстоять свою позицию.",
-    options:[
-      ["Спокойно защищать свои права",s=>{s.influence+=2;s.reputation+=2;}],
-      ["Не вмешиваться",s=>{s.health+=1;s.reputation-=1;}]
-    ]
-  },
-  {
-    title:"Публичный скандал",
-    text:"Вокруг твоего проекта или имени возник неприятный скандал.",
-    options:[
-      ["Открыто объяснить ситуацию",s=>{s.reputation+=2;s.influence+=1;}],
-      ["Временно уйти из публичного поля",s=>{s.influence-=2;s.health+=2;}]
-    ]
-  },
-  {
-    title:"Удачная возможность",
-    text:"Тебе предложили принять участие в перспективном проекте.",
-    options:[
-      ["Принять участие",s=>{s.skills+=3;s.connections+=3;s.reputation+=2;}],
-      ["Отказаться",s=>{s.health+=1;}]
-    ]
-  },
-  {
-    title:"Плохие новости",
-    text:"Планы на ближайшее время сорвались. Придётся искать другой путь.",
-    options:[
-      ["Составить новый план",s=>{s.skills+=1;s.health+=1;}],
-      ["Взять паузу",s=>{s.health+=3;s.reputation-=1;}]
-    ]
-  }
+const events=[
+{title:"Сложный период",text:"В семье возникли финансовые трудности. Атмосфера дома стала напряжённой.",options:[["Помочь близким",s=>{s.money-=12000;s.relations+=5;s.familySupport+=3}],["Сосредоточиться на себе",s=>{s.relations-=3;s.health-=2}]]},
+{title:"Нечестное предложение",text:"Знакомый предлагает сомнительную сделку. Обещает быстрые деньги, но последствия могут быть серьёзными.",options:[["Отказаться",s=>{s.reputation+=2;s.influence+=1}],["Связаться с сомнительной компанией",s=>{s.money+=5000;s.reputation-=8;s.risk+=10}]]},
+{title:"Потеря работы",text:"Компания сокращает расходы. Твою должность убрали.",options:[["Искать новую работу",s=>{s.employed=false;s.reputation-=2}],["Временно подрабатывать",s=>{s.money+=8000;s.skills+=1;s.employed=false}]]},
+{title:"Полезное знакомство",text:"Ты познакомился с человеком, который может помочь в будущем.",options:[["Поддерживать общение",s=>{s.connections+=5;s.relations+=2}],["Не придавать значения",s=>{s.relations-=1}]]},
+{title:"Неожиданные расходы",text:"Появились незапланированные расходы. Придётся пересмотреть бюджет.",options:[["Оплатить расходы",s=>{s.money-=10000;s.health+=1}],["Отложить решение",s=>{s.relations-=2;s.reputation-=1}]]},
+{title:"Возможность проявить себя",text:"Появился сложный проект. Он потребует много сил.",options:[["Взяться за проект",s=>{s.skills+=4;s.reputation+=4;s.health-=3}],["Отказаться",s=>{s.reputation-=1}]]},
+{title:"Предательство знакомого",text:"Человек, которому ты доверял, подвёл тебя.",options:[["Поговорить",s=>{s.relations-=2;s.reputation+=1}],["Прекратить общение",s=>{s.relations-=4;s.health+=1}]]},
+{title:"Проблемы с бизнесом",text:"Твоё дело столкнулось с трудностями. Доходы снизились.",options:[["Попробовать восстановить дело",s=>{s.money-=15000;s.skills+=2}],["Сократить расходы",s=>{s.money-=3000;s.reputation-=1}]]},
+{title:"Несправедливость",text:"Ты столкнулся с несправедливым отношением.",options:[["Защищать свои права",s=>{s.influence+=2;s.reputation+=2}],["Не вмешиваться",s=>{s.health+=1;s.reputation-=1}]]},
+{title:"Публичный скандал",text:"Вокруг твоего проекта или имени возник неприятный скандал.",options:[["Открыто объяснить ситуацию",s=>{s.reputation+=2;s.influence+=1}],["Временно уйти из публичного поля",s=>{s.influence-=2;s.health+=2}]]},
+{title:"Удачная возможность",text:"Тебе предложили принять участие в перспективном проекте.",options:[["Принять участие",s=>{s.skills+=3;s.connections+=3;s.reputation+=2}],["Отказаться",s=>{s.health+=1}]]}
 ];
-
-let state = null;
-let currentTab = "home";
-let pendingEvent = null;
 
 function defaultState(){
-  return {
-    name:"",surname:"",city:"Москва",age:0,
-    money:0,education:0,skills:0,reputation:0,
-    health:100,relations:50,influence:0,connections:0,
-    familySupport:0,risk:0,
-    actionsThisYear:0,year:1,history:[],
-    ambition:"",goal:"",career:null,careerLevel:0,
-    careerYears:0,employed:false,jobApplications:0,
-    schoolProgress:0,educationPath:"school",
-    educationStage:"Не начато",studyYears:0,
-    institution:"",studyProgress:0,
-    familyStatus:"Родители",
-    friends:0,partner:false,children:0,
-    monthlyExpenses:0,lastEventYear:-1,
-    completedGoals:[],pendingApplication:false
-  };
+ return {
+ name:"",surname:"",city:"Москва",age:0,money:0,education:0,skills:0,
+ reputation:0,health:100,relations:50,influence:0,connections:0,
+ familySupport:0,risk:0,actionsThisYear:0,year:1,history:[],
+ ambition:"",goal:"",career:null,careerLevel:0,careerYears:0,
+ employed:false,jobApplications:0,schoolProgress:0,
+ educationPath:"school",educationStage:"Не начато",studyYears:0,
+ institution:"",studyProgress:0,friends:0,partner:false,children:0,
+ monthlyExpenses:0,pendingApplication:false
+ };
 }
 
-function save(){
-  if(!state)return;
-  localStorage.setItem(KEY,JSON.stringify(state));
-}
+let state=null,currentTab="home",pendingEvent=null,toastTimer=null;
 
+function save(){if(state)localStorage.setItem(KEY,JSON.stringify(state))}
 function load(){
-  try{
-    const raw=localStorage.getItem(KEY);
-    if(!raw)return null;
-    const old=JSON.parse(raw);
-    if(!old || typeof old!=="object")return null;
-    const fresh=defaultState();
-    return {...fresh,...old,
-      actionsThisYear:Number(old.actionsThisYear)||0,
-      history:Array.isArray(old.history)?old.history:[],
-      completedGoals:Array.isArray(old.completedGoals)?old.completedGoals:[]
-    };
-  }catch(e){return null;}
+ try{
+ const old=JSON.parse(localStorage.getItem(KEY));
+ if(!old||typeof old!=="object")return null;
+ return {...defaultState(),...old,history:Array.isArray(old.history)?old.history:[]};
+ }catch(e){return null}
 }
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function clamp(n,min=0,max=100){return Math.max(min,Math.min(max,n))}
+function money(n){return Math.round(n).toLocaleString("ru-RU")+" ₽"}
+function log(text){state.history.unshift({age:state.age,text});if(state.history.length>100)state.history.length=100}
+function bar(v,max=100){return `<div class="progress"><div style="width:${clamp(v,0,max)/max*100}%"></div></div>`}
+function statCard(name,value){return `<div class="stat"><div class="name">${name}</div><div class="value">${value}</div></div>`}
 
-function esc(value){
-  return String(value??"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+function notify(message,title="Уведомление",icon="ℹ️"){
+ document.getElementById("toastTitle").textContent=title;
+ document.getElementById("toastMessage").textContent=message;
+ document.getElementById("toastIcon").textContent=icon;
+ document.getElementById("toastWrap").classList.add("show");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(hideToast,4500);
 }
-function clamp(n,min=0,max=100){return Math.max(min,Math.min(max,n));}
-function money(n){return Math.round(n).toLocaleString("ru-RU")+" ₽";}
-function log(text){
-  state.history.unshift({age:state.age,text});
-  if(state.history.length>100)state.history.length=100;
-}
-function statCard(name,value){
-  return `<div class="stat"><div class="name">${name}</div><div class="value">${value}</div></div>`;
-}
-function bar(value,max=100){
-  const p=clamp(value,0,max)/max*100;
-  return `<div class="progress"><div style="width:${p}%"></div></div>`;
-}
-function showTab(tab){
-  currentTab=tab;
-  nav.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
-  render();
-}
-nav.addEventListener("click",e=>{
-  const b=e.target.closest("button[data-tab]");
-  if(b)showTab(b.dataset.tab);
-});
+function hideToast(){document.getElementById("toastWrap").classList.remove("show")}
+function closeToast(e){if(e.target.id==="toastWrap")hideToast()}
 
 function createScreen(){
-  nav.classList.add("hidden");
-  app.innerHTML=`
-    <div class="section-title">Начни свою историю</div>
-    <div class="notice">Твоя жизнь начинается с рождения. Решения, обстоятельства и время будут влиять на то, кем ты станешь.</div>
-    <div class="card">
-      <h3>Личность</h3>
-      <label>Имя</label>
-      <input id="firstName" maxlength="24" placeholder="Например, Александр">
-      <label>Фамилия</label>
-      <input id="lastName" maxlength="30" placeholder="Например, Иванов">
-      <label>Город</label>
-      <input id="city" maxlength="35" value="Москва">
-      <label>Семейная ситуация</label>
-      <select id="family">
-        <option>Родители</option>
-        <option>Один родитель</option>
-        <option>Опекуны</option>
-        <option>Самостоятельная семья</option>
-      </select>
-      <button class="primary full" onclick="startLife()">Начать жизнь</button>
-    </div>
-  `;
+ nav.classList.add("hidden");
+ app.innerHTML=`
+ <div class="section-title">Начни свою историю</div>
+ <div class="notice">Твоя жизнь начинается с рождения. Решения, обстоятельства и время будут влиять на то, кем ты станешь.</div>
+ <div class="card">
+  <h3>Личность</h3>
+  <label>Имя</label><input id="firstName" maxlength="24" placeholder="Например, Александр">
+  <label>Фамилия</label><input id="lastName" maxlength="30" placeholder="Например, Иванов">
+  <label>Город</label><input id="city" maxlength="35" value="Москва">
+  <button class="primary full" onclick="startLife()">Начать жизнь</button>
+ </div>`;
 }
-
 function startLife(){
-  const name=document.getElementById("firstName").value.trim();
-  const surname=document.getElementById("lastName").value.trim();
-  if(!name||!surname){alert("Введи имя и фамилию.");return;}
-  state=defaultState();
-  state.name=name;state.surname=surname;
-  state.city=document.getElementById("city").value.trim()||"Не указан";
-  state.familyStatus=document.getElementById("family").value;
-  state.money=5000;
-  state.history=[];
-  log("Ты появился на свет. Началась твоя история.");
-  save();nav.classList.remove("hidden");showTab("home");
+ const name=document.getElementById("firstName").value.trim();
+ const surname=document.getElementById("lastName").value.trim();
+ if(!name||!surname){notify("Введи имя и фамилию персонажа.","Не все данные заполнены","⚠️");return}
+ state=defaultState();state.name=name;state.surname=surname;
+ state.city=document.getElementById("city").value.trim()||"Не указан";
+ state.money=5000;log("Ты появился на свет. Началась твоя история.");
+ save();nav.classList.remove("hidden");showTab("home");
 }
 
-function migrateProfile(){
-  if(state && (!state.surname || state.surname==="Не указана")){
-    const surname=prompt("Введи фамилию персонажа:");
-    if(surname && surname.trim())state.surname=surname.trim();
-    else state.surname="Не указана";
-    save();
-  }
+function showTab(tab){
+ currentTab=tab;
+ nav.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+ render();
 }
+nav.addEventListener("click",e=>{
+ const b=e.target.closest("button[data-tab]");
+ if(b)showTab(b.dataset.tab);
+});
 
 function homeScreen(){
-  const fullName=esc(state.name+" "+state.surname);
-  const career=state.career?esc(state.career):"Пока не выбрана";
-  const level=state.career?careerLevels[state.careerLevel].name:"Нет должности";
-  const goal=state.goal?esc(state.goal):"Пока не определена";
-  return `
-    <div class="row">
-      <div>
-        <div class="small muted">ТВОЯ ИСТОРИЯ</div>
-        <div style="font-size:20px;font-weight:850">${fullName}</div>
-        <div class="small muted">${esc(state.city)}</div>
-      </div>
-      <div class="center"><div class="big-age">${state.age}</div><div class="small muted">лет</div></div>
-    </div>
-    <div class="card" style="margin-top:14px">
-      <div class="row"><b>Текущий год жизни</b><span class="tag">Год ${state.year}</span></div>
-      <p class="muted small">Ты сам решаешь, когда наступит следующий год. За один год можно выполнить до пяти действий.</p>
-      <div class="row">
-        <span class="small muted">Действия использованы</span>
-        <b>${state.actionsThisYear}/5</b>
-      </div>
-      ${bar(state.actionsThisYear,5)}
-      <button class="primary full" style="margin-top:13px" onclick="nextYear()">Прожить следующий год →</button>
-    </div>
-    <div class="grid">
-      ${statCard("Деньги",money(state.money))}
-      ${statCard("Образование",state.education+" ур.")}
-      ${statCard("Навыки",state.skills)}
-      ${statCard("Репутация",state.reputation)}
-      ${statCard("Здоровье",state.health+"%")}
-      ${statCard("Отношения",state.relations)}
-      ${statCard("Влияние",state.influence)}
-      ${statCard("Связи",state.connections)}
-    </div>
-    <div class="card" style="margin-top:13px">
-      <h3>Твой жизненный путь</h3>
-      <div class="item"><div class="muted small">Стремление</div><b>${goal}</b></div>
-      <div class="item"><div class="muted small">Профессия</div><b>${career}</b></div>
-      <div class="item"><div class="muted small">Карьерная ступень</div><b>${level}</b></div>
-      <div class="item"><div class="muted small">Образование</div><b>${esc(state.educationStage)}</b></div>
-      <div class="item"><div class="muted small">Семья</div><b>${esc(state.familyStatus)}</b></div>
-    </div>
-    <div class="card">
-      <h3>Последние события</h3>
-      ${state.history.slice(0,5).map(h=>`<div class="item"><span class="tag">Возраст ${h.age}</span><div class="item-desc">${esc(h.text)}</div></div>`).join("")||'<p class="muted small">История пока пуста.</p>'}
-    </div>
-  `;
+ return `
+ <div class="row">
+  <div><div class="small muted">ТВОЯ ИСТОРИЯ</div>
+  <div style="font-size:20px;font-weight:850">${esc(state.name+" "+state.surname)}</div>
+  <div class="small muted">${esc(state.city)}</div></div>
+  <div class="center"><div class="big-age">${state.age}</div><div class="small muted">лет</div></div>
+ </div>
+ <div class="card" style="margin-top:14px">
+  <div class="row"><b>Текущий год жизни</b><span class="tag">Год ${state.year}</span></div>
+  <p class="muted small">Ты сам решаешь, когда наступит следующий год. За один год можно выполнить до пяти действий.</p>
+  <div class="row"><span class="small muted">Действия использованы</span><b>${state.actionsThisYear}/5</b></div>
+  ${bar(state.actionsThisYear,5)}
+  <button class="primary full" style="margin-top:13px" onclick="nextYear()">Прожить следующий год →</button>
+ </div>
+ <div class="grid">
+ ${statCard("Деньги",money(state.money))}
+ ${statCard("Образование",state.education+" ур.")}
+ ${statCard("Навыки",state.skills)}
+ ${statCard("Репутация",state.reputation)}
+ ${statCard("Здоровье",state.health+"%")}
+ ${statCard("Отношения",state.relations)}
+ ${statCard("Влияние",state.influence)}
+ ${statCard("Связи",state.connections)}
+ </div>
+ <div class="card" style="margin-top:13px">
+ <h3>Твой жизненный путь</h3>
+ <div class="item"><div class="muted small">Стремление</div><b>${esc(state.goal||"Пока не определено")}</b></div>
+ <div class="item"><div class="muted small">Профессия</div><b>${esc(state.career||"Пока не выбрана")}</b></div>
+ <div class="item"><div class="muted small">Карьерная ступень</div><b>${state.career?careerLevels[state.careerLevel].name:"Нет должности"}</b></div>
+ <div class="item"><div class="muted small">Образование</div><b>${esc(state.educationStage)}</b></div>
+ </div>
+ <div class="card"><h3>Последние события</h3>
+ ${state.history.slice(0,5).map(h=>`<div class="item"><span class="tag">Возраст ${h.age}</span><div class="item-desc">${esc(h.text)}</div></div>`).join("")||'<p class="muted small">История пока пуста.</p>'}
+ </div>`;
 }
+
+const actionList=[
+["Учиться","Повысить знания и подготовиться к будущему.",study],
+["Развивать навыки","Получить практический опыт.",train],
+["Подрабатывать","Заработать немного денег.",work],
+["Отдыхать","Восстановить здоровье.",rest],
+["Общаться","Улучшить отношения и расширить круг общения.",socialize],
+["Заниматься хобби","Найти интересы и развить способности.",hobby],
+["Помогать близким","Поддержать людей рядом.",helpFamily],
+["Работать над целью","Продвинуться к выбранному стремлению.",goalWork]
+];
 
 function actionsScreen(){
-  const actions=[
-    ["Учиться","Повысить знания и подготовиться к будущему.",()=>study()],
-    ["Развивать навыки","Получить практический опыт.",()=>train()],
-    ["Подрабатывать","Заработать немного денег.",()=>work()],
-    ["Отдыхать","Восстановить здоровье.",()=>rest()],
-    ["Общаться","Улучшить отношения и расширить круг общения.",()=>socialize()],
-    ["Заниматься хобби","Найти интересы и развить способности.",()=>hobby()],
-    ["Помогать семье","Поддержать близких.",()=>helpFamily()],
-    ["Работать над целью","Продвинуться к выбранному стремлению.",()=>goalWork()]
-  ];
-  return `
-    <div class="section-title">Действия</div>
-    <div class="notice">Каждое действие занимает часть твоего года. Выбирай с умом: времени на всё не хватит.</div>
-    <div class="card">
-      <div class="row"><b>Осталось действий</b><b>${5-state.actionsThisYear}/5</b></div>
-      ${bar(5-state.actionsThisYear,5)}
-    </div>
-    ${actions.map((a,i)=>`
-      <div class="card">
-        <div class="item-title">${a[0]}</div>
-        <div class="item-desc">${a[1]}</div>
-        <button class="secondary full" onclick="doAction(${i})" ${state.actionsThisYear>=5?"disabled":""}>Выполнить</button>
-      </div>
-    `).join("")}
-  `;
+ return `<div class="section-title">Действия</div>
+ <div class="notice">Каждое действие занимает часть твоего года. Выбирай с умом: времени на всё не хватит.</div>
+ <div class="card"><div class="row"><b>Осталось действий</b><b>${5-state.actionsThisYear}/5</b></div>${bar(5-state.actionsThisYear,5)}</div>
+ ${actionList.map((a,i)=>`<div class="card"><div class="item-title">${a[0]}</div><div class="item-desc">${a[1]}</div><button class="secondary full" onclick="doAction(${i})" ${state.actionsThisYear>=5?"disabled":""}>Выполнить</button></div>`).join("")}`;
 }
-
 function educationScreen(){
-  const options=[
-    ["Школа",0,6,"Получить базовое образование."],
-    ["Колледж",1,3,"Получить профессиональную подготовку."],
-    ["Университет",2,5,"Получить высшее образование."],
-    ["Магистратура",3,2,"Углубить знания по специальности."],
-    ["Аспирантура",4,3,"Заниматься научной работой."]
-  ];
-  return `
-    <div class="section-title">Образование</div>
-    <div class="card">
-      <h3>Текущий уровень</h3>
-      <div style="font-size:21px;font-weight:850">${esc(state.educationStage)}</div>
-      <div class="item-desc">Прогресс обучения: ${state.studyProgress}%</div>
-      ${bar(state.studyProgress)}
-      <p class="small muted">Образование открывает доступ к более сложным профессиям и высоким должностям.</p>
-    </div>
-    <div class="card">
-      <h3>Учебные заведения</h3>
-      ${options.map((o,i)=>`
-        <div class="item">
-          <div class="item-title">${o[0]}</div>
-          <div class="item-desc">${o[3]} Продолжительность: ${o[2]} лет.</div>
-          <button class="secondary full" onclick="enroll(${i})" ${state.age<6&&i===0?"disabled":""}>Поступить</button>
-        </div>
-      `).join("")}
-    </div>
-    <div class="notice">Поступление не гарантировано. Для некоторых направлений понадобятся знания, навыки и деньги. Можно развиваться и через практику, но некоторые должности будут недоступны без диплома.</div>
-  `;
+ const options=[["Школа",0,6,"Базовое образование."],["Колледж",1,3,"Профессиональная подготовка."],["Университет",2,5,"Высшее образование."],["Магистратура",3,2,"Углублённые знания."],["Аспирантура",4,3,"Научная работа."]];
+ const ages=[6,15,17,21,23],costs=[0,0,12000,18000,15000];
+ return `<div class="section-title">Образование</div>
+ <div class="card"><h3>Текущий уровень</h3><div style="font-size:21px;font-weight:850">${esc(state.educationStage)}</div><div class="item-desc">Прогресс обучения: ${state.studyProgress}%</div>${bar(state.studyProgress)}<p class="small muted">Образование открывает доступ к более сложным профессиям.</p></div>
+ <div class="card"><h3>Учебные заведения</h3>
+ ${options.map((o,i)=>`<div class="item"><div class="item-title">${o[0]}</div><div class="item-desc">${o[3]} Продолжительность: ${o[2]} лет.</div><button class="secondary full" onclick="enroll(${i})">Поступить</button></div>`).join("")}</div>
+ <div class="notice">Поступление зависит от возраста, подготовки и денег. Некоторые профессии требуют диплома.</div>`;
 }
 
 function careerScreen(){
-  const cats=Object.keys(categories);
-  const current=state.career?`
-    <div class="card">
-      <h3>Твоя карьера</h3>
-      <div class="item-title">${esc(state.career)}</div>
-      <span class="tag">${careerLevels[state.careerLevel].name}</span>
-      <p class="item-desc">Опыт в профессии: ${state.careerYears} лет.</p>
-      <p class="item-desc">Текущий годовой доход: ${money(careerLevels[state.careerLevel].salary*12)}</p>
-      <p class="item-desc">Следующая ступень: ${careerLevels[Math.min(9,state.careerLevel+1)].name}</p>
-      <button class="secondary full" onclick="applyPromotion()">Подать заявку на повышение</button>
-      <button class="ghost full" style="margin-top:7px" onclick="quitJob()">Уволиться</button>
-    </div>`:"";
-  return `
-    <div class="section-title">Карьера и профессии</div>
-    ${current}
-    <div class="card">
-      <h3>Выбери направление стремления</h3>
-      <p class="item-desc">Ты не получаешь профессию сразу. Сначала выбираешь направление, затем готовишься и постепенно строишь карьеру.</p>
-      <select id="ambitionSelect">
-        <option value="">Выбери направление</option>
-        ${cats.map(c=>`<option ${state.ambition===c?"selected":""}>${c}</option>`).join("")}
-      </select>
-      <button class="primary full" onclick="setAmbition()">Выбрать стремление</button>
-      ${state.ambition?`<p class="small muted">Твоё направление: ${esc(state.ambition)}</p>`:""}
-    </div>
-    ${state.ambition?`
-      <div class="card">
-        <h3>Профессии направления «${esc(state.ambition)}»</h3>
-        ${categories[state.ambition].map((p,i)=>`
-          <div class="item">
-            <div class="item-title">${esc(p)}</div>
-            <div class="item-desc">Путь к профессии начинается с подготовки, практики и первых рабочих мест.</div>
-            <button class="secondary full" onclick="chooseCareer(${i})">Поставить цель</button>
-          </div>
-        `).join("")}
-      </div>`:""}
-  `;
+ const cats=Object.keys(categories);
+ return `<div class="section-title">Карьера и профессии</div>
+ ${state.career?`<div class="card"><h3>Твоя карьера</h3><div class="item-title">${esc(state.career)}</div><span class="tag">${careerLevels[state.careerLevel].name}</span>
+ <p class="item-desc">Опыт: ${state.careerYears} лет.</p><p class="item-desc">Годовой доход: ${money(careerLevels[state.careerLevel].salary*12)}</p>
+ <button class="secondary full" onclick="applyPromotion()">Подать заявку на повышение</button>
+ <button class="ghost full" style="margin-top:7px" onclick="quitJob()">Уволиться</button></div>`:""}
+ <div class="card"><h3>Выбери направление стремления</h3>
+ <p class="item-desc">Сначала выбираешь направление, затем готовишься и постепенно строишь карьеру.</p>
+ <select id="ambitionSelect"><option value="">Выбери направление</option>${cats.map(c=>`<option ${state.ambition===c?"selected":""}>${c}</option>`).join("")}</select>
+ <button class="primary full" onclick="setAmbition()">Выбрать стремление</button>
+ ${state.ambition?`<p class="small muted">Твоё направление: ${esc(state.ambition)}</p>`:""}</div>
+ ${state.ambition?`<div class="card"><h3>Профессии направления «${esc(state.ambition)}»</h3>
+ ${categories[state.ambition].map((p,i)=>`<div class="item"><div class="item-title">${esc(p)}</div><div class="item-desc">Путь к профессии начинается с подготовки, практики и первых рабочих мест.</div><button class="secondary full" onclick="chooseCareer(${i})">Поставить цель</button></div>`).join("")}</div>`:""}
+ ${state.pendingApplication?`<div class="card"><h3>Подготовка к цели</h3><p class="item-desc">Цель: ${esc(state.goal)}. Для первой должности нужны возраст, навыки, образование и репутация.</p><button class="primary full" onclick="applyForJob()">Подать заявку на первую работу</button></div>`:""}`;
 }
 
 function lifeScreen(){
-  return `
-    <div class="section-title">Личная жизнь</div>
-    <div class="card">
-      <h3>Семья и отношения</h3>
-      <div class="item"><span class="muted small">Семейная ситуация</span><b>${esc(state.familyStatus)}</b></div>
-      <div class="item"><span class="muted small">Отношения</span><b>${state.relations}/100</b>${bar(state.relations)}</div>
-      <div class="item"><span class="muted small">Друзья</span><b>${state.friends}</b></div>
-      <div class="item"><span class="muted small">Поддержка семьи</span><b>${state.familySupport}</b></div>
-      <div class="item"><span class="muted small">Партнёр</span><b>${state.partner?"Есть":"Пока нет"}</b></div>
-      <div class="item"><span class="muted small">Дети</span><b>${state.children}</b></div>
-      <button class="secondary full" onclick="familyAction()">Заняться отношениями</button>
-    </div>
-    <div class="card">
-      <h3>Репутация и влияние</h3>
-      <div class="item"><span class="muted small">Репутация</span><b>${state.reputation}</b>${bar(state.reputation)}</div>
-      <div class="item"><span class="muted small">Влияние</span><b>${state.influence}</b>${bar(state.influence)}</div>
-      <div class="item"><span class="muted small">Полезные связи</span><b>${state.connections}</b>${bar(state.connections)}</div>
-      <p class="item-desc">Репутация показывает, как к тебе относятся. Влияние — насколько сильно ты можешь менять решения и привлекать внимание. Связи помогают находить возможности, но не гарантируют успех.</p>
-    </div>
-    <div class="card">
-      <h3>Сложности жизни</h3>
-      <p class="item-desc">В игре могут происходить финансовые трудности, потеря работы, обман, конфликты, неудачи и давление со стороны окружающих. Последствия зависят от твоих решений и характеристик.</p>
-      <span class="tag red">Непростые события</span>
-      <span class="tag gold">Риск и последствия</span>
-      <span class="tag">Репутация</span>
-    </div>
-    <div class="card">
-      <h3>История жизни</h3>
-      ${state.history.map(h=>`<div class="item"><span class="tag">Возраст ${h.age}</span><div class="item-desc">${esc(h.text)}</div></div>`).join("")||'<p class="muted small">Пока нет записей.</p>'}
-    </div>
-    <button class="danger full" onclick="newLife()">Начать новую жизнь</button>
-  `;
+ return `<div class="section-title">Личная жизнь</div>
+ <div class="card"><h3>Отношения</h3>
+ <div class="item"><span class="muted small">Отношения</span><b>${state.relations}/100</b>${bar(state.relations)}</div>
+ <div class="item"><span class="muted small">Друзья</span><b>${state.friends}</b></div>
+ <div class="item"><span class="muted small">Поддержка близких</span><b>${state.familySupport}</b></div>
+ <div class="item"><span class="muted small">Партнёр</span><b>${state.partner?"Есть":"Пока нет"}</b></div>
+ <div class="item"><span class="muted small">Дети</span><b>${state.children}</b></div>
+ <button class="secondary full" onclick="familyAction()">Заняться отношениями</button></div>
+ <div class="card"><h3>Репутация и влияние</h3>
+ <div class="item"><span class="muted small">Репутация</span><b>${state.reputation}</b>${bar(state.reputation)}</div>
+ <div class="item"><span class="muted small">Влияние</span><b>${state.influence}</b>${bar(state.influence)}</div>
+ <div class="item"><span class="muted small">Полезные связи</span><b>${state.connections}</b>${bar(state.connections)}</div>
+ <p class="item-desc">Репутация показывает, как к тебе относятся. Влияние — насколько сильно ты можешь менять решения. Связи помогают находить возможности.</p></div>
+ <div class="card"><h3>Сложности жизни</h3><p class="item-desc">Возможны финансовые трудности, потеря работы, обман, конфликты, неудачи и давление со стороны окружающих.</p><span class="tag red">Непростые события</span><span class="tag gold">Риск и последствия</span></div>
+ <div class="card"><h3>История жизни</h3>${state.history.map(h=>`<div class="item"><span class="tag">Возраст ${h.age}</span><div class="item-desc">${esc(h.text)}</div></div>`).join("")||'<p class="muted small">Пока нет записей.</p>'}</div>
+ <button class="danger full" onclick="newLife()">Начать новую жизнь</button>`;
 }
 
 function render(){
-  if(!state){createScreen();return;}
-  nav.classList.remove("hidden");
-  const screens={
-    home:homeScreen,actions:actionsScreen,education:educationScreen,
-    career:careerScreen,life:lifeScreen
-  };
-  app.innerHTML=screens[currentTab]();
+ const screens={home:homeScreen,actions:actionsScreen,education:educationScreen,career:careerScreen,life:lifeScreen};
+ app.innerHTML=screens[currentTab]();
 }
-
 function spendAction(){
-  if(state.actionsThisYear>=5){alert("На этот год действий больше не осталось.");return false;}
-  state.actionsThisYear++;
-  return true;
+ if(state.actionsThisYear>=5){notify("На этот год действий больше не осталось.","Лимит исчерпан","⏳");return false}
+ state.actionsThisYear++;return true;
 }
-function finishAction(message){
-  log(message);save();render();
-}
-function doAction(i){
-  const actions=[study,train,work,rest,socialize,hobby,helpFamily,goalWork];
-  actions[i]();
-}
+function finishAction(message){log(message);save();render()}
+function doAction(i){actionList[i][2]()}
 function study(){
-  if(!spendAction())return;
-  if(state.age<6){state.skills+=1;finishAction("Ты начал познавать окружающий мир.");return;}
-  state.skills+=2;state.studyProgress+=10;
-  if(state.studyProgress>=100){state.studyProgress=0;state.education++;}
-  finishAction("Ты посвятил время учёбе. Знания постепенно растут.");
+ if(!spendAction())return;
+ state.skills+=2;state.studyProgress+=10;
+ if(state.studyProgress>=100){state.studyProgress=0;state.education++}
+ finishAction("Ты посвятил время учёбе. Знания постепенно растут.");
 }
-function train(){
-  if(!spendAction())return;
-  state.skills+=3;state.health=clamp(state.health-2);
-  finishAction("Ты развивал свои навыки и получал практический опыт.");
-}
+function train(){if(!spendAction())return;state.skills+=3;state.health=clamp(state.health-2);finishAction("Ты развивал навыки и получал практический опыт.")}
 function work(){
-  if(!spendAction())return;
-  if(state.age<14){alert("Пока ты слишком молод для подработки.");state.actionsThisYear--;return;}
-  const income=state.age<18?3000:10000+state.skills*150;
-  state.money+=income;state.skills+=1;state.reputation+=1;
-  finishAction("Ты поработал и заработал "+money(income)+".");
+ if(state.age<14){notify("Сейчас можно готовиться только к будущей профессии.","Пока рано работать","🎓");return}
+ if(!spendAction())return;
+ const income=state.age<18?3000:10000+state.skills*150;
+ state.money+=income;state.skills++;state.reputation++;
+ finishAction("Ты поработал и заработал "+money(income)+".");
 }
-function rest(){
-  if(!spendAction())return;
-  state.health=clamp(state.health+12);
-  finishAction("Ты отдохнул и восстановил силы.");
-}
-function socialize(){
-  if(!spendAction())return;
-  state.relations=clamp(state.relations+5);
-  state.friends+=1;state.connections=clamp(state.connections+2);
-  finishAction("Ты провёл время с людьми и расширил круг общения.");
-}
-function hobby(){
-  if(!spendAction())return;
-  state.skills+=1;state.health=clamp(state.health+3);
-  finishAction("Ты занимался любимым делом.");
-}
-function helpFamily(){
-  if(!spendAction())return;
-  const cost=Math.min(3000,state.money);
-  state.money-=cost;state.relations=clamp(state.relations+4);
-  state.familySupport+=2;
-  finishAction("Ты помог семье. Отношения стали немного крепче.");
-}
+function rest(){if(!spendAction())return;state.health=clamp(state.health+12);finishAction("Ты отдохнул и восстановил силы.")}
+function socialize(){if(!spendAction())return;state.relations=clamp(state.relations+5);state.friends++;state.connections=clamp(state.connections+2);finishAction("Ты провёл время с людьми и расширил круг общения.")}
+function hobby(){if(!spendAction())return;state.skills++;state.health=clamp(state.health+3);finishAction("Ты занимался любимым делом.")}
+function helpFamily(){if(!spendAction())return;const cost=Math.min(3000,state.money);state.money-=cost;state.relations=clamp(state.relations+4);state.familySupport+=2;finishAction("Ты помог близким. Отношения стали немного крепче.")}
 function goalWork(){
-  if(!spendAction())return;
-  if(!state.goal){alert("Сначала выбери жизненную цель в разделе «Карьера».");state.actionsThisYear--;return;}
-  state.skills+=2;state.reputation+=1;
-  if(state.ambition)state.influence=clamp(state.influence+1);
-  finishAction("Ты сделал ещё один шаг к своей цели: "+state.goal+".");
+ if(!state.goal){notify("Сначала выбери жизненную цель в разделе «Карьера».","Нет цели","🎯");return}
+ if(!spendAction())return;
+ state.skills+=2;state.reputation++;
+ if(state.ambition)state.influence=clamp(state.influence+1);
+ finishAction("Ты сделал ещё один шаг к своей цели: "+state.goal+".");
 }
 
-function enroll(index){
-  const names=["Школа","Колледж","Университет","Магистратура","Аспирантура"];
-  const ages=[6,15,17,21,23];
-  const costs=[0,0,12000,18000,15000];
-  if(state.age<ages[index]){alert("Для поступления пока рано. Требуемый возраст: "+ages[index]+".");return;}
-  if(index>0 && state.education<index){alert("Сначала нужно завершить предыдущий этап образования.");return;}
-  if(state.money<costs[index]){alert("Не хватает денег на обучение. Можно накопить или развиваться другим путём.");return;}
-  state.money-=costs[index];
-  state.educationPath=names[index];
-  state.institution=names[index];
-  state.educationStage=names[index]+" — обучение";
-  state.studyYears=0;state.studyProgress=0;
-  log("Ты поступил на этап обучения: "+names[index]+".");
-  save();render();
+function enroll(i){
+ const names=["Школа","Колледж","Университет","Магистратура","Аспирантура"];
+ const ages=[6,15,17,21,23],costs=[0,0,12000,18000,15000];
+ if(state.age<ages[i]){notify("Для поступления пока рано. Требуемый возраст: "+ages[i]+" лет.","Пока рано","🎓");return}
+ if(i>0&&state.education<i){notify("Сначала нужно завершить предыдущий этап образования.","Не хватает образования","📚");return}
+ if(state.money<costs[i]){notify("Не хватает денег на обучение. Можно накопить или развиваться другим путём.","Недостаточно денег","💰");return}
+ state.money-=costs[i];state.institution=names[i];state.educationStage=names[i]+" — обучение";state.studyYears=0;state.studyProgress=0;
+ log("Ты поступил на этап обучения: "+names[i]+".");save();render();
 }
 
 function setAmbition(){
-  const value=document.getElementById("ambitionSelect").value;
-  if(!value){alert("Выбери направление.");return;}
-  state.ambition=value;
-  state.goal="Развиваться в сфере: "+value;
-  log("Ты определил своё направление: "+value+".");
-  save();render();
+ const value=document.getElementById("ambitionSelect").value;
+ if(!value){notify("Сначала выбери направление.","Не выбрано направление","⚠️");return}
+ state.ambition=value;state.goal="Развиваться в сфере: "+value;
+ log("Ты определил своё направление: "+value+".");save();render();
 }
 
-function chooseCareer(index){
-  const p=categories[state.ambition][index];
-  if(state.age<14){alert("Сейчас можно только готовиться к будущей профессии.");return;}
-  if(state.career){alert("Сначала заверши текущую карьеру или уволись.");return;}
-  state.goal="Стать "+p;
-  state.pendingApplication=true;
-  log("Ты поставил перед собой цель: "+p+". Теперь нужно подготовиться и получить первую возможность.");
-  save();render();
-  alert("Цель установлена. Чтобы начать карьеру, развивай навыки, образование и репутацию. Когда будешь готов, вернись в раздел «Карьера».");
-  app.innerHTML+=`
-    <div class="card">
-      <h3>Подготовка к цели</h3>
-      <p class="item-desc">Для первой должности нужны возраст от 16 лет, навыки от 10 и репутация от 3. Для некоторых профессий требования выше.</p>
-      <button class="primary full" onclick="applyForJob()">Подать заявку на первую работу</button>
-    </div>`;
+function chooseCareer(i){
+ const p=categories[state.ambition][i];
+ if(state.career){notify("Сначала заверши текущую карьеру или уволись.","У тебя уже есть работа","💼");return}
+ state.goal="Стать "+p;
+ state.pendingApplication=true;
+ log("Ты поставил перед собой цель: "+p+". Теперь нужно подготовиться и получить первую возможность.");
+ save();render();
+ if(state.age<14){
+  notify("Сейчас можно готовиться только к будущей профессии. Учись, развивай навыки и набирайся опыта. Когда подрастёшь, сможешь подать заявку на первую работу.","Пока рано работать","🎓");
+ }else{
+  notify("Цель установлена. Теперь нужно подготовиться, выполнить требования и подать заявку на первую работу.","Новая цель","🎯");
+ }
 }
 
 function requirements(){
-  const p=state.goal.toLowerCase();
-  let education=0,skills=10,age=16;
-  if(/врач|хирург|кардиолог|невролог|педиатр|стоматолог|ветеринар|психолог|фармацевт/.test(p)){education=3;skills=35;age=22;}
-  else if(/судья|адвокат|дипломат|инженер|архитектор|пилот|преподаватель университета/.test(p)){education=2;skills=25;age=21;}
-  else if(/директор|губернатор|министр|ректор|топ-руководитель/.test(p)){education=3;skills=50;age=25;}
-  else if(/программист|разработчик|аналитик|учитель|журналист/.test(p)){education=1;skills=20;age=18;}
-  return {education,skills,age};
+ const p=state.goal.toLowerCase();
+ let education=0,skills=10,age=16;
+ if(/врач|хирург|кардиолог|невролог|педиатр|стоматолог|ветеринар|психолог|фармацевт/.test(p)){education=3;skills=35;age=22}
+ else if(/судья|адвокат|дипломат|инженер|архитектор|пилот|преподаватель университета/.test(p)){education=2;skills=25;age=21}
+ else if(/директор|губернатор|министр|ректор|топ-руководитель/.test(p)){education=3;skills=50;age=25}
+ else if(/программист|разработчик|аналитик|учитель|журналист/.test(p)){education=1;skills=20;age=18}
+ return {education,skills,age};
 }
 
 function applyForJob(){
-  if(!state.pendingApplication || !state.goal){alert("Сначала выбери цель.");return;}
-  const r=requirements();
-  if(state.age<r.age){alert("Пока рано. Для этой профессии нужен возраст от "+r.age+" лет.");return;}
-  if(state.education<r.education){alert("Недостаточно образования. Требуемый уровень: "+r.education+".");return;}
-  if(state.skills<r.skills){alert("Нужно больше навыков. Сейчас: "+state.skills+", требуется: "+r.skills+".");return;}
-  if(state.reputation<3){alert("Сначала нужно заработать хорошую репутацию.");return;}
-  state.jobApplications++;
-  const chance=clamp(45+state.reputation/2+state.connections/5+state.influence/8,20,90);
-  if(Math.random()*100<chance){
-    state.career=state.goal.replace("Стать ","");
-    state.careerLevel=0;state.careerYears=0;
-    state.employed=true;state.pendingApplication=false;
-    log("Тебя приняли на первую должность: "+state.career+". Это только начало пути.");
-    alert("Заявка одобрена! Ты получил первую должность.");
-  }else{
-    state.reputation=clamp(state.reputation-1);
-    log("Твою заявку на работу отклонили. Нужно улучшить подготовку и попробовать снова.");
-    alert("Заявка отклонена. Продолжай развиваться и попробуй позже.");
-  }
-  save();render();
+ if(!state.pendingApplication||!state.goal){notify("Сначала выбери цель.","Нет цели","⚠️");return}
+ const r=requirements();
+ if(state.age<r.age){notify("Для этой профессии нужен возраст от "+r.age+" лет. Пока продолжай готовиться.","Пока рано","🎓");return}
+ if(state.education<r.education){notify("Недостаточно образования. Требуемый уровень: "+r.education+".","Нужно образование","📚");return}
+ if(state.skills<r.skills){notify("Нужно больше навыков. Сейчас: "+state.skills+", требуется: "+r.skills+".","Нужно развиваться","⚡");return}
+ if(state.reputation<3){notify("Сначала нужно заработать хорошую репутацию.","Нужна репутация","⭐");return}
+ state.jobApplications++;
+ const chance=clamp(45+state.reputation/2+state.connections/5+state.influence/8,20,90);
+ if(Math.random()*100<chance){
+  state.career=state.goal.replace("Стать ","");state.careerLevel=0;state.careerYears=0;state.employed=true;state.pendingApplication=false;
+  log("Тебя приняли на первую должность: "+state.career+". Это только начало пути.");
+  notify("Заявка одобрена! Ты получил первую должность.","Тебя приняли","🎉");
+ }else{
+  state.reputation=clamp(state.reputation-1);
+  log("Твою заявку на работу отклонили. Нужно улучшить подготовку и попробовать снова.");
+  notify("Заявку отклонили. Продолжай развиваться и попробуй позже.","Отказ в работе","📄");
+ }
+ save();render();
 }
 
 function applyPromotion(){
-  if(!state.career)return;
-  if(state.careerLevel>=9){alert("Ты достиг максимальной ступени в этой карьерной системе.");return;}
-  const next=careerLevels[state.careerLevel+1];
-  const requiredYears=next.years;
-  const requiredSkills=15+(state.careerLevel+1)*8;
-  const requiredRep=5+(state.careerLevel+1)*7;
-  const requiredInfluence=state.careerLevel>=5?10+(state.careerLevel-4)*10:0;
-  if(state.careerYears<requiredYears || state.skills<requiredSkills ||
-     state.reputation<requiredRep || state.influence<requiredInfluence){
-    alert("Для повышения пока недостаточно достижений.\n\nНужно:\nОпыт: "+requiredYears+" лет\nНавыки: "+requiredSkills+"\nРепутация: "+requiredRep+"\nВлияние: "+requiredInfluence);
-    return;
-  }
-  state.careerLevel++;
-  state.reputation=clamp(state.reputation+3);
-  state.influence=clamp(state.influence+2);
-  log("Ты получил повышение: "+next.name+".");
-  save();render();
+ if(!state.career)return;
+ if(state.careerLevel>=9){notify("Ты достиг максимальной ступени этой карьерной системы.","Максимальный уровень","🏆");return}
+ const next=careerLevels[state.careerLevel+1];
+ const years=next.years,skills=15+(state.careerLevel+1)*8,rep=5+(state.careerLevel+1)*7;
+ const influence=state.careerLevel>=5?10+(state.careerLevel-4)*10:0;
+ if(state.careerYears<years||state.skills<skills||state.reputation<rep||state.influence<influence){
+  notify("Для повышения пока недостаточно достижений. Нужно: опыт "+years+" лет, навыки "+skills+", репутация "+rep+", влияние "+influence+".","Повышение пока недоступно","📈");return;
+ }
+ state.careerLevel++;state.reputation=clamp(state.reputation+3);state.influence=clamp(state.influence+2);
+ log("Ты получил повышение: "+next.name+".");save();render();
+ notify("Ты получил новую должность: "+next.name+".","Повышение","🏆");
 }
-
 function quitJob(){
-  if(!confirm("Уволиться с текущей работы?"))return;
-  log("Ты ушёл с должности: "+state.career+".");
-  state.career=null;state.careerLevel=0;state.careerYears=0;
-  state.employed=false;save();render();
+ if(!confirm("Уволиться с текущей работы?"))return;
+ log("Ты ушёл с должности: "+state.career+".");
+ state.career=null;state.careerLevel=0;state.careerYears=0;state.employed=false;save();render();
 }
-
 function familyAction(){
-  if(state.age<16){alert("Сейчас лучше сосредоточиться на взрослении и отношениях с близкими.");return;}
-  if(state.actionsThisYear>=5){alert("На этот год действий больше не осталось.");return;}
-  if(!spendAction())return;
-  state.relations=clamp(state.relations+5);
-  state.connections=clamp(state.connections+1);
-  if(state.age>=18 && !state.partner && Math.random()<0.25){
-    state.partner=true;
-    log("В твоей жизни появился близкий человек. Отношения только начинаются.");
-  }else{
-    log("Ты уделил время личной жизни и близким людям.");
-  }
-  save();render();
+ if(state.age<16){notify("Пока лучше сосредоточиться на взрослении и отношениях с близкими.","Пока рано","❤️");return}
+ if(!spendAction())return;
+ state.relations=clamp(state.relations+5);state.connections=clamp(state.connections+1);
+ if(state.age>=18&&!state.partner&&Math.random()<.25){state.partner=true;log("В твоей жизни появился близкий человек. Отношения только начинаются.")}
+ else log("Ты уделил время личной жизни и близким людям.");
+ save();render();
 }
 
 function nextYear(){
-  if(!confirm("Прожить следующий год? Текущий год завершится."))return;
-  state.age++;state.year++;state.actionsThisYear=0;
-  if(state.age===6 && state.educationStage==="Не начато"){
-    state.educationStage="Школьник";
-    log("Ты пошёл в школу.");
+ if(!confirm("Прожить следующий год? Текущий год завершится."))return;
+ state.age++;state.year++;state.actionsThisYear=0;
+ if(state.age===6&&state.educationStage==="Не начато"){state.educationStage="Школьник";log("Ты пошёл в школу.")}
+ if(state.age>=6&&state.age<=17&&state.educationStage==="Школьник"){
+  state.studyYears++;
+  if(state.studyYears%2===0)state.education++;
+  if(state.age===17){state.educationStage="Среднее образование";state.education=Math.max(state.education,1);log("Ты завершил школьный этап.")}
+ }
+ if(state.institution){
+  state.studyYears++;
+  const duration=state.institution==="Университет"?5:state.institution==="Колледж"?3:state.institution==="Магистратура"?2:3;
+  if(state.studyYears>=duration){
+   state.education++;state.educationStage=state.institution+" — завершено";
+   log("Ты завершил обучение: "+state.institution+".");state.institution="";state.studyYears=0;
   }
-  if(state.age>=6 && state.age<=17 && state.educationStage==="Школьник"){
-    state.studyYears++;
-    if(state.studyYears%2===0)state.education=clamp(state.education+1,0,100);
-    if(state.age===17){state.educationStage="Среднее образование";state.education= Math.max(state.education,1);log("Ты завершил школьный этап.");}
-  }
-  if(state.institution){
-    state.studyYears++;
-    if(state.studyYears>= (state.institution==="Университет"?5:state.institution==="Колледж"?3:state.institution==="Магистратура"?2:3)){
-      state.education++;
-      state.educationStage=state.institution+" — завершено";
-      log("Ты завершил обучение: "+state.institution+".");
-      state.institution="";
-      state.studyYears=0;
-    }
-  }
-  if(state.career && state.employed){
-    state.careerYears++;
-    const salary=careerLevels[state.careerLevel].salary*12;
-    state.money+=salary;
-    log("Ты получил годовой доход от работы: "+money(salary)+".");
-    if(Math.random()<0.08){
-      state.reputation=clamp(state.reputation+2);
-      state.influence=clamp(state.influence+1);
-      log("Твои результаты заметили. Репутация немного выросла.");
-    }
-  }
-  if(state.age>=18){
-    const expenses=state.partner?18000:10000;
-    state.money-=expenses;
-    state.monthlyExpenses=expenses;
-    log("Расходы на жизнь за год составили "+money(expenses*12)+".");
-  }
-  state.money=Math.max(0,state.money);
-  state.health=clamp(state.health-(state.age>=18?2:1));
-  state.relations=clamp(state.relations-1);
-  if(state.age>=18 && state.money===0 && Math.random()<0.35){
-    state.health=clamp(state.health-3);
-    state.reputation=clamp(state.reputation-1);
-    log("Из-за нехватки денег пришлось отказаться от части планов.");
-  }
-  if(state.career && Math.random()<0.04){
-    state.employed=false;
-    state.reputation=clamp(state.reputation-2);
-    log("Ты потерял работу. Теперь нужно искать новую возможность.");
-  }
-  if(state.pendingApplication && state.age>=16 && state.age%2===0){
-    state.skills+=1;
-  }
-  randomEvent();
-  save();showTab("home");
+ }
+ if(state.career&&state.employed){
+  state.careerYears++;const salary=careerLevels[state.careerLevel].salary*12;
+  state.money+=salary;log("Ты получил годовой доход от работы: "+money(salary)+".");
+  if(Math.random()<.08){state.reputation=clamp(state.reputation+2);state.influence=clamp(state.influence+1);log("Твои результаты заметили. Репутация немного выросла.")}
+ }
+ if(state.age>=18){
+  const expenses=state.partner?18000:10000;
+  state.money-=expenses*12;
+  log("Расходы на жизнь за год составили "+money(expenses*12)+".");
+ }
+ state.money=Math.max(0,state.money);
+ state.health=clamp(state.health-(state.age>=18?2:1));
+ state.relations=clamp(state.relations-1);
+ if(state.age>=18&&state.money===0&&Math.random()<.35){
+  state.health=clamp(state.health-3);state.reputation=clamp(state.reputation-1);
+  log("Из-за нехватки денег пришлось отказаться от части планов.");
+ }
+ if(state.career&&Math.random()<.04){
+  state.employed=false;state.reputation=clamp(state.reputation-2);log("Ты потерял работу. Теперь нужно искать новую возможность.");
+ }
+ randomEvent();
+ save();
 }
 
 function randomEvent(){
-  if(state.age<3)return;
-  const event=events[Math.floor(Math.random()*events.length)];
-  if(Math.random()>0.48)return;
-  pendingEvent=event;
-  app.innerHTML=`
-    <div class="section-title">Событие твоей жизни</div>
-    <div class="event">
-      <div class="item-title">${esc(event.title)}</div>
-      <p class="item-desc">${esc(event.text)}</p>
-      <div class="choice">
-        ${event.options.map((o,i)=>`<button class="secondary" onclick="chooseEvent(${i})">${esc(o[0])}</button>`).join("")}
-      </div>
-    </div>
-    <div class="notice">Возраст: ${state.age} лет. Твой выбор повлияет на дальнейшую историю.</div>
-  `;
+ if(state.age<3||Math.random()>.48){showTab("home");return}
+ pendingEvent=events[Math.floor(Math.random()*events.length)];
+ app.innerHTML=`
+ <div class="section-title">Событие твоей жизни</div>
+ <div class="event"><div class="item-title">${esc(pendingEvent.title)}</div>
+ <p class="item-desc">${esc(pendingEvent.text)}</p>
+ <div class="choice">${pendingEvent.options.map((o,i)=>`<button class="secondary" onclick="chooseEvent(${i})">${esc(o[0])}</button>`).join("")}</div></div>
+ <div class="notice">Возраст: ${state.age} лет. Твой выбор повлияет на дальнейшую историю.</div>`;
 }
-function chooseEvent(index){
-  if(!pendingEvent)return;
-  pendingEvent.options[index][1](state);
-  state.health=clamp(state.health);
-  state.relations=clamp(state.relations);
-  state.reputation=clamp(state.reputation);
-  state.influence=clamp(state.influence);
-  state.connections=clamp(state.connections);
-  log("Событие: "+pendingEvent.title+". Решение: "+pendingEvent.options[index][0]+".");
-  pendingEvent=null;save();showTab("home");
+function chooseEvent(i){
+ if(!pendingEvent)return;
+ pendingEvent.options[i][1](state);
+ ["health","relations","reputation","influence","connections"].forEach(k=>state[k]=clamp(state[k]));
+ log("Событие: "+pendingEvent.title+". Решение: "+pendingEvent.options[i][0]+".");
+ pendingEvent=null;save();showTab("home");
 }
-
 function newLife(){
-  if(!confirm("Начать новую жизнь? Текущее сохранение будет удалено."))return;
-  localStorage.removeItem(KEY);state=null;pendingEvent=null;createScreen();
+ if(!confirm("Начать новую жизнь? Текущее сохранение будет удалено."))return;
+ localStorage.removeItem(KEY);state=null;pendingEvent=null;createScreen();
 }
 
 state=load();
 if(state){
-  if(!state.name)state.name="Персонаж";
-  migrateProfile();
-  nav.classList.remove("hidden");
-  render();
-}else{
-  createScreen();
-}
+ if(!state.name)state.name="Персонаж";
+ if(!state.surname)state.surname="Не указана";
+ nav.classList.remove("hidden");render();
+}else createScreen();
 </script>
 </body>
 </html>
